@@ -57,6 +57,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mykmitl_panner.urls'
 
+NPM_BIN_PATH = '/usr/local/bin/npm'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
