@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static tailwind_tags %}
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}My Website{% endblock %}</title>
+
+    {% tailwind_css %}
+    
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Header -->
+    {% block nav %}
+
+    {% endblock %}
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-10">
+        {% block content %}
+
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-500 text-white text-center p-4 mt-10">
+        <p>&copy; 2024 My Website. All rights reserved.</p>
+    </footer>
+
+    {% block script %}
+        <script src="/"></script>
+    {% endblock %}
+
+</body>
+</html>
