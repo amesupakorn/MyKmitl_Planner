@@ -1,4 +1,4 @@
-# MyKmitl_Panner
+# MyKmitl_Panner with Django
 > Final project Server-side
 
 ### UseCase Diagram
