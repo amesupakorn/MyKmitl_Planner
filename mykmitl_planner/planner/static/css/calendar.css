@@ -1,0 +1,78 @@
+.fc-event {
+    font-size: 0.85rem;
+    color: black !important; /* สีฟอนต์เป็นสีดำ */
+}
+.sidebar {
+    width: 300px;
+    background-color: #f9fafb;
+    padding: 20px;
+    border-left: 1px solid #e5e7eb;
+}
+
+/* Custom Dropdown Style */
+.custom-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.dropdown-btn {
+    background-color: #fff;
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    width: 100%;
+    z-index: 1;
+}
+
+.dropdown-options div {
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-options div:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown-options div span {
+    margin-left: 10px;
+}
+
+/* Color Options */
+.LightSkyBlue {
+    background-color: #87CEFA;
+    color: black;
+}
+
+.LawnGreen {
+    background-color: #afeb5c;
+    color: black;
+}
+
+.SoftPink {
+    background-color: #ff8fc6;
+    color: black;
+}
+
+.MediumPurple {
+    background-color: #9370DB;
+    color: black;
+}
+
+.gold {
+    background-color: #ffe038;
+    color: black;
+}
