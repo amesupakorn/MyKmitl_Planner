@@ -20,6 +20,6 @@ class SignUpPage(View):
 class CalendarPage(View):
     
     def get(self, request):
-        return render(request, "register.html",{
+        return render(request, "calendar.html",{
 
         })   
