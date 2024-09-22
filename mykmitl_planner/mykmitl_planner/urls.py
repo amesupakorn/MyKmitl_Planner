@@ -20,5 +20,5 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
-    path("mykmitl_panner/", include("panner.urls")),
+    path("mykmitl_planner/", include("planner.urls")),
 ]

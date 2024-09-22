@@ -2,12 +2,18 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .models import *
 
-class MainView(View):
+class SignInPage(View):
     
     def get(self, request):
-        student = Student.objects.get(pk=1)
-        return render(request, "index.html",{
-            "student" : student,
+        return render(request, "login.html",{
+
         })
         
+
+class SignUpPage(View):
+    
+    def get(self, request):
+        return render(request, "register.html",{
+
+        })
         
