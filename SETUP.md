@@ -98,3 +98,81 @@ python manage.py shell_plus --notebook
 import os
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 ```
+
+ติดตั้งแพ็กเกจ django-tailwind ผ่าน pip:
+python -m pip install django-tailwind
+​
+ถ้าคุณต้องการให้หน้าเว็บโหลดใหม่อัตโนมัติระหว่างการพัฒนา (ดูขั้นตอนที่ 10-12 ด้านล่าง) ให้ใช้ extras [reload] ซึ่งจะติดตั้งแพ็กเกจ django-browser-reload ด้วย:
+python -m pip install 'django-tailwind[reload]'
+​
+หรือคุณสามารถติดตั้งเวอร์ชันล่าสุดที่กำลังพัฒนาได้จาก:
+
+python -m pip install git+https://github.com/timonweb/django-tailwind.git
+​
+เพิ่ม 'tailwind' ใน INSTALLED_APPS ในไฟล์ settings.py:
+
+INSTALLED_APPS = [
+  # แอปของ Django อื่นๆ
+  'tailwind',
+]
+​
+สร้างแอป Django ที่ใช้ร่วมกับ Tailwind CSS โดยใช้คำสั่ง:
+python manage.py tailwind init
+​
+เพิ่มแอปใหม่ 'theme' ที่คุณสร้างลงใน INSTALLED_APPS ในไฟล์ settings.py:
+
+INSTALLED_APPS = [
+  # แอปของ Django อื่นๆ
+  'tailwind',
+  'theme',
+]
+​
+ลงทะเบียนแอป 'theme' ที่สร้างขึ้นโดยเพิ่มบรรทัดต่อไปนี้ในไฟล์ settings.py:
+TAILWIND_APP_NAME = 'theme'
+​
+ตรวจสอบให้แน่ใจว่าได้มีการเพิ่มรายการ INTERNAL_IPS และมีที่อยู่ IP 127.0.0.1 ในไฟล์ settings.py:
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+​
+ติดตั้ง dependencies ของ Tailwind CSS โดยใช้คำสั่ง:
+
+python manage.py tailwind install
+
+​
+Django Tailwind มาพร้อมกับ template base.html ที่อยู่ในโฟลเดอร์ your_tailwind_app_name/templates/base.html คุณสามารถขยายหรือลบได้ถ้าคุณมี layout ของคุณเองแล้ว
+ถ้าคุณไม่ได้ใช้ template base.html ที่มาพร้อมกับ Django Tailwind ให้เพิ่ม {% tailwind_css %} ลงใน template base.html ของคุณ:
+{% load static tailwind_tags %}
+<head>
+    ...
+    {% tailwind_css %}
+    ...
+</head>
+​
+เพิ่มและตั้งค่า django_browser_reload ซึ่งจะช่วยให้หน้าเว็บโหลดใหม่อัตโนมัติในโหมดการพัฒนา เพิ่มมันใน INSTALLED_APPS ในไฟล์ settings.py:
+INSTALLED_APPS = [
+  # แอปของ Django อื่นๆ
+  'tailwind',
+  'theme',
+  'django_browser_reload',
+]
+​
+เพิ่ม middleware ใน settings.py:
+MIDDLEWARE = [
+  # ...
+  "django_browser_reload.middleware.BrowserReloadMiddleware",
+  # ...
+]
+​
+หมายเหตุ: ควรวาง middleware นี้หลัง middleware ที่มีการเข้ารหัส response เช่น GZipMiddleware ของ Django
+รวม URL ของ django_browser_reload ในไฟล์ urls.py:
+
+from django.urls import include, path
+urlpatterns = [
+    ...,
+    path("__reload__/", include("django_browser_reload.urls")),
+]
+​
+สุดท้าย คุณสามารถใช้คลาส Tailwind CSS ใน HTML ของคุณได้แล้ว เริ่มเซิร์ฟเวอร์พัฒนาโดยรันคำสั่ง:
+
+python manage.py tailwind start
