@@ -5,6 +5,7 @@ from planner.models import *
 
 class SignInPage(View):
     
+    
     def get(self, request):
         return render(request, "login.html",{
 
