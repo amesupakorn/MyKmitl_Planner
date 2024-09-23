@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     
     
     'planner',
-    'authen',
+    'auth',
     'bookings',
     'chat'
 ]
