@@ -1,5 +1,5 @@
 from django.db import models
-from planner.models import *
+from planner.models import UniversityStaff, Student
 
 class Message(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

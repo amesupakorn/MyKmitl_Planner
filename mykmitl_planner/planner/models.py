@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from bookings.models import Facility, Event
+
 class Student(models.Model):
     student_user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
