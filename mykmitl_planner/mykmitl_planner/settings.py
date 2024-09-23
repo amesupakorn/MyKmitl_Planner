@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from pyexpat.errors import messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,34 +35,43 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django.contrib.humanize",
     
-    
+
+     # แอปของ allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.mfa',
     'tailwind',
     'theme',
     'django_browser_reload',
     
+    'widget_tweaks',
     
     'planner',
-    # 'auth',
     'bookings',
-    'chat'
+    'chat',
+    'authen'
 ]
 TAILWIND_APP_NAME = 'theme'
+SITE_ID = 1 
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Authentication middleware
+    'allauth.account.middleware.AccountMiddleware',  # Add this line
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'mykmitl_planner.urls'
@@ -72,8 +83,13 @@ NPM_BIN_PATH = '/usr/local/bin/npm'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [
+            os.path.join(BASE_DIR, 'authen', 'templates'),
+            os.path.join(BASE_DIR, 'chat', 'templates'),
+            os.path.join(BASE_DIR, 'bookings', 'templates'),
+            os.path.join(BASE_DIR, 'planner', 'templates')
+        ],
+        'APP_DIRS': True,  # ให้ Django ค้นหาเทมเพลตจากโฟลเดอร์ 'templates' ของแอปใน INSTALLED_APPS
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -84,6 +100,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'mykmitl_planner.wsgi.application'
 
@@ -141,9 +158,23 @@ STATIC_URL = 'static/'
 
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+            os.path.join(BASE_DIR, 'authen', 'static'),
+            os.path.join(BASE_DIR, 'chat', 'static'),
+            os.path.join(BASE_DIR, 'bookings', 'static'),
+            os.path.join(BASE_DIR, 'planner', 'static')
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ตั้งค่า authentication backends สำหรับ allauth
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',  # การยืนยันตัวตนแบบปกติ
+    'allauth.account.auth_backends.AuthenticationBackend',  # สำหรับ allauth
+)
+
+# เพิ่มเติมการตั้งค่าสำหรับ allauth
+ACCOUNT_EMAIL_VERIFICATION = 'optional'  # บังคับให้ผู้ใช้ยืนยันอีเมล
+ACCOUNT_EMAIL_REQUIRED = True  # จำเป็นต้องใช้อีเมลในการสมัคร
+
