@@ -7,5 +7,5 @@
 
 ### Er Diagrame
 
-![er diagram](image/er.jpg)
+![er diagram](image/er.png)
 
