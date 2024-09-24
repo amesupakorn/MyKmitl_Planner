@@ -3,18 +3,18 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Student(models.Model):
-    student_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    student_user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50, null=True)
+    last_name = models.CharField(max_length=50, null=True)
     email = models.EmailField(max_length=50, unique=True)
-    year_of_study = models.DateField()
-    major = models.CharField(max_length=30)
+    year_of_study = models.DateField(null=True)
+    major = models.CharField(max_length=30, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
 class UniversityStaff(models.Model):
-    staff_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    staff_user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=50, unique=True)

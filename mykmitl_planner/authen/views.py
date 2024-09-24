@@ -3,8 +3,10 @@ from django.shortcuts import render,redirect
 from django.views import View
 from allauth.account.forms import SignupForm, LoginForm
 from django.contrib.auth import login, logout  # Import Django's login function
-
+from planner.models import Student
 from django.views.generic import TemplateView
+from django.contrib.auth.models import User
+
 class SignInPage(View):
     
     def get(self, request):
@@ -47,6 +49,13 @@ class SignUpPage(View):
         if form.is_valid():
             try:
                 user = form.save(self.request)# ตรวจสอบว่า email address ถูกสร้างขึ้นหรือไม่
+                userid = User.objects.get(username = user)
+                
+                Student.objects.create(
+                    student_user = userid,
+                    email = user.email
+                )
+                
                 email_address = user.emailaddress_set.get(email=user.email) 
                 if not email_address.verified:
                     email_address.send_confirmation(self.request)  # ส่งอีเมลยืนยันอีกครั้งหากยังไม่ได้ยืนยัน
