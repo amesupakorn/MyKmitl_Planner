@@ -78,7 +78,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mykmitl_planner.urls'
 
-NPM_BIN_PATH = '/usr/local/bin/npm'
+# NPM_BIN_PATH = '/usr/local/bin/npm'
 
 
 
@@ -115,7 +115,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "mykmitl", 
         "USER":  "postgres",
-        "PASSWORD": "6743",
+        "PASSWORD": "password",
         "HOST": "localhost",
         "PORT": "8000",
     }

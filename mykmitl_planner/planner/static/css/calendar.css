@@ -1,13 +1,3 @@
-.fc-event {
-    font-size: 0.85rem;
-    color: black !important; /* สีฟอนต์เป็นสีดำ */
-}
-.sidebar {
-    width: 300px;
-    background-color: #f9fafb;
-    padding: 20px;
-    border-left: 1px solid #e5e7eb;
-}
 
 /* Custom Dropdown Style */
 .custom-dropdown {
@@ -62,13 +52,13 @@
     color: black;
 }
 
-.SoftPink {
-    background-color: #ff8fc6;
+.PowderPink {
+    background-color: #FFB2D0;
     color: black;
 }
 
-.MediumPurple {
-    background-color: #9370DB;
+.BrightLilac {
+    background-color: #D891EF;
     color: black;
 }
 
