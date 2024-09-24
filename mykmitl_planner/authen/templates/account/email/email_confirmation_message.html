@@ -1,0 +1,28 @@
+{% load static %}
+{% load static tailwind_tags %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Signin</title>
+    <meta charset="UTF-8">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    {% tailwind_css %}
+</head>
+    <body style="font-family: Arial, sans-serif; background-color: #f6f6f6; margin: 0; padding: 20px;">
+        <table style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px;">
+            <tr>
+                <td style="text-align: center;">
+                    <h1 style="color: #333333;">ยืนยันอีเมลของคุณ</h1>
+                    <p style="color: #555555;">ขอบคุณที่ลงทะเบียนกับเรา! กรุณายืนยันอีเมลของคุณโดยคลิกที่ปุ่มด้านล่าง:</p>
+                    <a href="{{ activate_url }}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">ยืนยันอีเมล</a>
+                    <p style="color: #555555; margin-top: 20px;">หากลิงก์ไม่ทำงาน คุณสามารถคัดลอกลิงก์นี้ไปวางในเบราว์เซอร์ของคุณ: <br> <a href="{{ activate_url }}">{{ activate_url }}</a></p>
+                    <p style="color: #555555;">ลิงก์นี้จะหมดอายุภายใน 3 วัน</p>
+                </td>
+            </tr>
+        </table>
+    </body>

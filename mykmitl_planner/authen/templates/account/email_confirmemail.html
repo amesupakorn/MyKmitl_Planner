@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Confirmation Sent</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="email-confirmation-message">
+        <h2>Email Confirmation Sent</h2>
+        <p>We have sent an email confirmation link to your email address. Please check your inbox and click the link to verify your email.</p>
+        <a href="{% url 'account_login' %}">Back to Login</a>
+    </div>
+</body>
+</html>

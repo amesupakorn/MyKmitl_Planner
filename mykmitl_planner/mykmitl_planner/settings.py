@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.mfa',
+    
     'tailwind',
     'theme',
     'django_browser_reload',
@@ -71,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Authentication middleware
     'allauth.account.middleware.AccountMiddleware',  # Add this line
     'django.contrib.messages.middleware.MessageMiddleware',
+    
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -174,7 +176,24 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',  # สำหรับ allauth
 )
 
-# เพิ่มเติมการตั้งค่าสำหรับ allauth
-ACCOUNT_EMAIL_VERIFICATION = 'optional'  # บังคับให้ผู้ใช้ยืนยันอีเมล
-ACCOUNT_EMAIL_REQUIRED = True  # จำเป็นต้องใช้อีเมลในการสมัคร
+# ให้ผู้ใช้ต้องยืนยันอีเมลหลังจากสมัครสมาชิก
 
+
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # บังคับให้ต้องยืนยันอีเมลก่อนล็อกอินได้
+ACCOUNT_EMAIL_REQUIRED = True  # บังคับให้ผู้ใช้กรอกอีเมล
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"  # ล็อกอินด้วยอีเมลแทน username
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # ลิงก์ยืนยันอีเมลหมดอายุใน 3 วัน
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # เซิร์ฟเวอร์ SMTP ของผู้ให้บริการอีเมล
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'supakorn642@gmail.com'
+EMAIL_HOST_PASSWORD = 'ansd zsvg xwah sngj'
+
+# DEFAULT_FROM_EMAIL = ''  
+# # ที่อยู่อีเมลที่จะใช้ในการส่ง

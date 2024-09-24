@@ -33,7 +33,7 @@
                 </div>
             {% endif %}
         
-            <form method="POST" action="account_signup" class="space-y-6 mt-6">
+            <form method="POST" action="{% url 'account_signup' %}" class="space-y-6 mt-6">
                 {% csrf_token %}
 
                 <!-- Email field -->
