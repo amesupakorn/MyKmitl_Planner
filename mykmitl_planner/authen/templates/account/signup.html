@@ -17,22 +17,34 @@
 
 <body>
     <div class="absolute top-10 left-10 flex items-center space-x-2">
-        <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-12 w-12"> 
+        <img src="{% static 'image/logo.png' %}" alt="Logo" class="h-12 w-12"> 
         <span class="font-bold text-white text-xl">MYKMITL_PLANNER</span>                
     </div>
+
+    <div class="flex justify-center items-center mt-4">
+        {% if messages %}
+            <div id="message-box" class="fixed top-5 z-50 bg-white shadow-lg rounded-lg p-4 text-center transition-opacity duration-1000 inline-block max-w-full">
+                {% for message in messages %}
+                    <div class="relative flex items-center justify-center space-x-2 {% if message.tags == 'error' %} text-red-500 {% elif message.tags == 'success' %} text-green-500 {% endif %}">
+                        <div class="text-sm font-medium">{{ message }}</div>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            {% if message.tags == 'error' %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            {% elif message.tags == 'success' %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            {% endif %}
+                        </svg>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
     
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md bg-white p-10 rounded-lg shadow-lg">
 
             <h2 class="text-center text-3xl font-bold tracking-tight text-gray-900">Sign up</h2>
-            {% if messages %}
-                <div>
-                    {% for message in messages %}
-                        <p class="text-red-500">{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        
             <form method="POST" action="{% url 'account_signup' %}" class="space-y-6 mt-6">
                 {% csrf_token %}
 
@@ -190,6 +202,8 @@
             </p>
         </div>
     </div>
+    
+    <script src="{% static 'script/login.js' %}"></script>
 
 </body>
 </html>

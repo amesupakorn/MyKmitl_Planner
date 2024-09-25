@@ -47,28 +47,38 @@ class SignUpPage(View):
     def post(self, request):
         form = SignupForm(request.POST)
         if form.is_valid():
+            # ตรวจสอบว่าอีเมลลงท้ายด้วย '@kmitl.ac.th'
+            email = form.cleaned_data.get('email')
+            if not email.endswith('@kmitl.ac.th'):
+                messages.error(request, "You must use a KMITL email address (kmitl.ac.th)")
+                return render(request, "account/signup.html", {'form': form})
+
             try:
-                user = form.save(self.request)# ตรวจสอบว่า email address ถูกสร้างขึ้นหรือไม่
-                userid = User.objects.get(username = user)
+                # บันทึกผู้ใช้
+                user = form.save(self.request)
+                userid = User.objects.get(username=user.username)
                 
+                # สร้างข้อมูล Student
                 Student.objects.create(
-                    student_user = userid,
-                    email = user.email
+                    student_user=userid,
+                    email=user.email
                 )
                 
                 email_address = user.emailaddress_set.get(email=user.email) 
                 if not email_address.verified:
                     email_address.send_confirmation(self.request)  # ส่งอีเมลยืนยันอีกครั้งหากยังไม่ได้ยืนยัน
-                    
+                
+                messages.success(request, "You have signed up successfully.")
                 return redirect('account_email_confirmation')
             except ValueError as e:
                 return render(request, "account/signup.html", {'form': form})
         else:
             return render(request, "account/signup.html", {'form': form})
 
-class EmailConfirmationSentView(TemplateView):
-    template_name = "account/email_confirmemail_sent.html"
+class EmailConfirmationSentView(View):
     
+    def get(self, request):
+        return render(request, "account/email_confirmemail.html", {})    
 
 class LogOutPage(View):
     

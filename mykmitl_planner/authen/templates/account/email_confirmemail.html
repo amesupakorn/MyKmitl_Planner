@@ -1,16 +1,68 @@
+{% load static %}
+{% load static tailwind_tags %}
+{% load widget_tweaks %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Confirm Email</title>
     <meta charset="UTF-8">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Confirmation Sent</title>
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    {% tailwind_css %}
 </head>
 <body>
-    <div class="email-confirmation-message">
-        <h2>Email Confirmation Sent</h2>
-        <p>We have sent an email confirmation link to your email address. Please check your inbox and click the link to verify your email.</p>
-        <a href="{% url 'account_login' %}">Back to Login</a>
+    
+    <!-- Logo -->
+    <div class="absolute top-10 left-10 flex items-center space-x-2">
+        <img src="{% static 'image/logo.png' %}" alt="Logo" class="h-12 w-12"> 
+        <span class="font-bold text-white text-xl">MYKMITL_PLANNER</span>                
     </div>
+
+
+    <div class="flex justify-center items-center mt-4">
+        {% if messages %}
+            <div id="message-box" class="fixed top-5 z-50 bg-white shadow-lg rounded-lg p-4 text-center transition-opacity duration-1000 inline-block max-w-full">
+                {% for message in messages %}
+                    <div class="relative flex items-center justify-center space-x-2 {% if message.tags == 'error' %} text-red-500 {% elif message.tags == 'success' %} text-green-500 {% endif %}">
+                        <div class="text-sm font-medium">{{ message }}</div>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            {% if message.tags == 'error' %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            {% elif message.tags == 'success' %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            {% endif %}
+                        </svg>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Form Container -->
+    <div class="flex min-h-full flex-col justify-center px-8 py-12 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md bg-white p-8 rounded-lg shadow-lg">
+
+            <img src="{% static 'image/email-campaigns.webp' %}" alt="emailconfirm" class=""> 
+
+            <h2 class="text-center text-2xl font-bold tracking-tight text-gray-900">Please confirm your email address</h2>
+
+
+            <p class="mt-6 text-center text-sm text-gray-500">
+                We have sent an email confirmation link to your email address. Please check your inbox and click the link to verify your email.
+            </p>
+            
+            <div class="py-8">
+                <button type="button" onclick="window.location.href='{% url 'account_login' %}'" class="flex w-full justify-center rounded-md bg-orange-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500">
+                    Back to Login
+                </button>
+            </div>
+            
+
+
+    <script src="{% static 'script/login.js' %}"></script>
+
 </body>
 </html>
