@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+        .font-family-karla { font-family: karla; }
+        .bg-sidebar { background: #ff7626; }
+        .cta-btn { color: #ff7626; }
+        .upgrade-btn { background: #e65705; }
+        .upgrade-btn:hover { background: #fd5d00; }
+        .active-nav-link { background: #e65705; }
+        .nav-item:hover { background: #e65705; }
+        .account-link:hover { background: #ff7626; }
+.fc-event {
+    font-size: 0.85rem;
+    color: black !important; /* สีฟอนต์เป็นสีดำ */
+}
+.sidebar {
+    width: 300px;
+    background-color: #f9fafb;
+    padding: 20px;
+    border-left: 1px solid #e5e7eb;
+}

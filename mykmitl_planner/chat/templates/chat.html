@@ -1,53 +1,60 @@
-<!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>CodePen - Simple Chat UI</title>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge"><link rel="stylesheet" href="./style.css">
+{% extends "layoutchat.html" %}
+{% load static %}
 
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<section class="msger">
-  <main class="msger-chat">
-    <div class="msg left-msg">
+{% block title %}Chat{% endblock %}
 
-      <div class="msg-bubble">
-        <div class="msg-info">
-          <div class="msg-info-name">BOT</div>
-          <div class="msg-info-time">12:45</div>
-        </div>
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock %}
 
-        <div class="msg-text">
-          Hi, welcome to SimpleChat! Go ahead and send me a message.
-        </div>
-      </div>
-    </div>
+{% block content %}
+    <section class="msger">
+        <main class="msger-chat">
+            <div class="msg left-msg">
 
-    <div class="msg right-msg">
+            <div class="msg-bubble">
+                <div class="msg-info">
+                <div class="msg-info-name">BOT</div>
+                <div class="msg-info-time">12:45</div>
+                </div>
 
-      <div class="msg-bubble">
-        <div class="msg-info">
-          <div class="msg-info-name">Sajad</div>
-          <div class="msg-info-time">12:46</div>
-        </div>
+                <div class="msg-text">
+                Hi, welcome to SimpleChat! Go ahead and send me a message.
+                </div>
+            </div>
+            </div>
 
-        <div class="msg-text">
-          You can change your name in JS section!
-        </div>
-      </div>
-    </div>
-  </main>
+            <div class="msg right-msg">
 
-  <form class="msger-inputarea">
-    <input type="text" class="msger-input" placeholder="Enter your message...">
-    <button type="submit" class="msger-send-btn">Send</button>
-  </form>
-</section>
-<!-- partial -->
-  <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script><script  src="./script.js"></script>
+            <div class="msg-bubble">
+                <div class="msg-info">
+                <div class="msg-info-name">Sajad</div>
+                <div class="msg-info-time">12:46</div>
+                </div>
 
+                <div class="msg-text">
+                You can change your name in JS section!
+                </div>
+            </div>
+            </div>
+        </main>
+
+        <form class="msger-inputarea">            <!-- Input field -->
+            <input type="text" class="msger-input" placeholder="Enter your message...">
+            <button type="submit" class="msger-send-btn">Send</button>
+        </form>
+        
+        <!-- Font Awesome for the icon -->
+        
+        
+        
+    </section>
+{% endblock %}
+
+{% block script %}
+  <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
+  <script src="{% static 'scripts/chat.js' %}"></script>
+  
+{% endblock %}
 </body>
 </html>

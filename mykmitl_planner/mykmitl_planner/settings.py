@@ -110,12 +110,23 @@ WSGI_APPLICATION = 'mykmitl_planner.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#        "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "mykmitl", 
+#         "USER":  "postgres",
+#         "PASSWORD": "6743",
+#         "HOST": "localhost",
+#         "PORT": "8000",
+#     }
+# }
+
 DATABASES = {
        "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "mykmitl", 
         "USER":  "postgres",
-        "PASSWORD": "6743",
+        "PASSWORD": "password",
         "HOST": "localhost",
         "PORT": "8000",
     }
@@ -157,7 +168,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
 
 STATICFILES_DIRS = [
             os.path.join(BASE_DIR, 'authen', 'static'),

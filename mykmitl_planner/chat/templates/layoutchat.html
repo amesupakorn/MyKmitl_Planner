@@ -7,13 +7,12 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-
+    
     <title>{% block title %} {% endblock %}</title>
 
     <meta name="author" content="David Grzyb">
     <meta name="description" content="">
-
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css'>
@@ -55,7 +54,7 @@
                     <a href="{% url 'planner_dashboard' %}" class="text-white text-1xl px-3 font-semibold uppercase hover:text-gray-300">Mykmitl Planner</a>
                 </div>
                 <nav class="text-white text-base font-semibold pt-3">
-                    <a href="{% url 'planner_dashboard' %}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+                    <a href="{% url 'planner_dashboard' %}" class="flex items-center opacity-75 hover:opacity-100 text-white py-4 pl-6 nav-item">
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Calendar
                     </a>
@@ -63,7 +62,7 @@
                         <i class="fas fa-map-marker-alt mr-3"></i>
                         Booking
                     </a>
-                    <a href="{% url 'chat' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <a href="{% url 'chat' %}" class="flex items-center text-white active-nav-link hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-comments mr-3"></i>
                         Chat
                     </a>
@@ -86,12 +85,15 @@
                         <button @click="isOpen = !isOpen" class="relative z-10 bg-transparent hover:bg-gray-100 focus:bg-gray-100 focus:outline-none px-4 py-2">
                             <a>{{ user.username }}</a>
                         </button>
+                       
                     {% else %}
                         <button @click="isOpen = !isOpen" class="relative z-10 bg-transparent hover:bg-gray-100 focus:bg-gray-100 focus:outline-none px-4 py-2">
                             <a>admin</a>
                         </button>
+
                     {% endif %}
                     <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
+
                     <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
                         <a href="#" class="block px-4 py-2 account-link hover:text-white">Account</a>
                         <a href="{% url 'account_logout' %}" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
@@ -146,5 +148,7 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+</body>
+
 </body>
 </html>
