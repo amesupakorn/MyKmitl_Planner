@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     'planner',
     'bookings',
     'chat',
-    'authen'
+    'authen',
 ]
 TAILWIND_APP_NAME = 'theme'
 SITE_ID = 1 
