@@ -10,6 +10,7 @@ urlpatterns = [
      path("logout", views.LogOutPage.as_view(), name="account_logout"),
      path('email-confirmemail_sent/', views.EmailConfirmationSentView.as_view(), name='account_email_confirmation'),
      path('profile/', views.EditProfile.as_view(), name='profile'),
+     path('password/change/', views.PasswordChangeView.as_view(), name='account_change_password')
 
      
 ]

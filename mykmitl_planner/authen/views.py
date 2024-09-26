@@ -7,7 +7,8 @@ from planner.models import Student
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 from .forms import ProfileForm
-
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 class SignInPage(View):
     
     def get(self, request):
@@ -94,9 +95,11 @@ class EditProfile(View):
         # ดึงข้อมูลโปรไฟล์ของผู้ใช้ปัจจุบัน
         student = Student.objects.get(student_user=request.user)
         form = ProfileForm(instance=student)
+        formpass = PasswordChangeForm(user=request.user)
         
         return render(request, "editaccount.html", {
             'form': form,
+            'formpass' : formpass,
             'student': student,  
         })
 
@@ -106,8 +109,6 @@ class EditProfile(View):
         form = ProfileForm(request.POST, request.FILES, instance=student)
 
         if form.is_valid():
-            print("Fsad") 
-
             form.save()  # บันทึกข้อมูลที่แก้ไข
             messages.success(request, "update profile successfully")
             return redirect('profile')  # เปลี่ยนเส้นทางไปยังหน้าดูโปรไฟล์
@@ -116,3 +117,18 @@ class EditProfile(View):
             'form': form,
             'student': student,
         })
+
+class PasswordChangeView(View):
+
+    def post(self, request):
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Your password has been changed successfully.")
+            return redirect('profile')  # Redirect ไปหน้าโปรไฟล์หรือหน้าอื่นที่ต้องการ
+        else:
+            messages.error(request, "There was an error with your form. Please try again.")
+            return render(request, 'account/password_change.html', {
+                'form': form
+            })
