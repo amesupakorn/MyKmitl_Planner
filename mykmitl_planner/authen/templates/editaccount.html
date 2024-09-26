@@ -1,0 +1,87 @@
+{% extends "layoutprofile.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block title %}Profile{% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="profile container mx-auto py-10 px-8">
+        <h1 class="text-3xl font-bold mb-6">MY PROFILE</h1>
+        
+        <!-- Profile Picture Section -->
+        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-300 mb-6"> <!-- เพิ่ม border -->
+            <h2 class="font-bold text-xl mb-4">Profile Picture</h2>
+            <div class="flex items-center">
+                {% if student.profile_picture %}
+                    <img class="h-24 w-24 rounded-full object-cover mr-4" src="{{ student.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="h-24 w-24 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
+                {% endif %}
+                <form id="uploadForm" action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- ปุ่ม Upload New -->
+                    <label for="id_profile_picture" class="flex items-center px-5 py-2 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 cursor-pointer">
+                        <svg class="h-5 w-5 text-gray-500"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                        </svg>
+                        &nbsp; Upload New
+                    </label>
+                    
+                    <!-- Input รูปโปรไฟล์จาก Django Form (ซ่อนไว้) -->
+                    {{ form.profile_picture|add_class:"hidden" }} 
+                </form>
+            </div>
+        </div>
+
+        <!-- Personal Information Section -->
+        <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-300 mb-6">
+                <h2 class="font-bold text-xl mb-4">Personal Information</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-gray-500">First Name</p>
+                        <p class="font-semibold">{{ student.first_name }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Last Name</p>
+                        <p class="font-semibold">{{ student.last_name }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Year of Study</p>
+                        <p class="font-semibold">{{ student.year_ }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Major</p>
+                        <p class="font-semibold">{{ student.major }}</p>
+                    </div>
+                </div>
+                    <button class="mt-4 bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Edit Info</button>
+            </div>
+        </form>
+
+        <!-- Email Section -->
+        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-300"> <!-- เพิ่ม border -->
+            <h2 class="font-bold text-xl mb-4">Email address</h2>
+            <p class="text-gray-500">Email</p>
+            <p class="font-semibold">{{ student.email }}</p>
+            <button class="mt-4 bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Edit Email</button>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block script %}
+  <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
+  <script src="{% static "script/profile.js" %}"></script>
+{% endblock %}
+</body>
+</html>

@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout  # Import Django's login function
 from planner.models import Student
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
+from .forms import ProfileForm
 
 class SignInPage(View):
     
@@ -28,7 +29,7 @@ class SignInPage(View):
                     'form': form
                 })
 
-            # หากยืนยันอีเมลแล้ว ให้ล็อกอินผู้ใช้
+            messages.success(request, "You have signed in successfully.")
             login(request, user)  # ใช้ฟังก์ชัน login ของ Django เพื่อทำการล็อกอิน
             return redirect('planner_dashboard')  # Redirect หลังจากล็อกอินสำเร็จ
         else:
@@ -86,3 +87,32 @@ class LogOutPage(View):
         logout(request)
         messages.success(request, "You have been logged out successfully.")
         return redirect('account_login')
+    
+class EditProfile(View):
+    
+    def get(self, request):
+        # ดึงข้อมูลโปรไฟล์ของผู้ใช้ปัจจุบัน
+        student = Student.objects.get(student_user=request.user)
+        form = ProfileForm(instance=student)
+        
+        return render(request, "editaccount.html", {
+            'form': form,
+            'student': student,  
+        })
+
+    def post(self, request):
+
+        student = Student.objects.get(student_user=request.user)
+        form = ProfileForm(request.POST, request.FILES, instance=student)
+
+        if form.is_valid():
+            print("Fsad") 
+
+            form.save()  # บันทึกข้อมูลที่แก้ไข
+            messages.success(request, "update profile successfully")
+            return redirect('profile')  # เปลี่ยนเส้นทางไปยังหน้าดูโปรไฟล์
+        
+        return render(request, "editaccount.html", {
+            'form': form,
+            'student': student,
+        })
