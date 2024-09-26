@@ -126,7 +126,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "mykmitl", 
         "USER":  "postgres",
-        "PASSWORD": "password",
+        "PASSWORD": "6743",
         "HOST": "localhost",
         "PORT": "8000",
     }
@@ -207,3 +207,6 @@ EMAIL_HOST_PASSWORD = 'ansd zsvg xwah sngj'
 
 # DEFAULT_FROM_EMAIL = ''  
 # # ที่อยู่อีเมลที่จะใช้ในการส่ง
+
+MEDIA_URL = '/media/'  # URL สำหรับการเข้าถึงไฟล์ที่อัปโหลด
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # ที่เก็บไฟล์ที่อัปโหลดจริง

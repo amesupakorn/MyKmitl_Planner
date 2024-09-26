@@ -74,5 +74,5 @@ pip install fido2
 
 python manage.py tailwind init
 
-
+python -m pip install Pillow
 ```

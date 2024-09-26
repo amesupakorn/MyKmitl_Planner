@@ -6,7 +6,9 @@ from django.contrib.auth import login, logout  # Import Django's login function
 from planner.models import Student
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
-
+from .forms import ProfileForm
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 class SignInPage(View):
     
     def get(self, request):
@@ -28,7 +30,7 @@ class SignInPage(View):
                     'form': form
                 })
 
-            # หากยืนยันอีเมลแล้ว ให้ล็อกอินผู้ใช้
+            messages.success(request, "You have signed in successfully.")
             login(request, user)  # ใช้ฟังก์ชัน login ของ Django เพื่อทำการล็อกอิน
             return redirect('planner_dashboard')  # Redirect หลังจากล็อกอินสำเร็จ
         else:
@@ -86,3 +88,47 @@ class LogOutPage(View):
         logout(request)
         messages.success(request, "You have been logged out successfully.")
         return redirect('account_login')
+    
+class EditProfile(View):
+    
+    def get(self, request):
+        # ดึงข้อมูลโปรไฟล์ของผู้ใช้ปัจจุบัน
+        student = Student.objects.get(student_user=request.user)
+        form = ProfileForm(instance=student)
+        formpass = PasswordChangeForm(user=request.user)
+        
+        return render(request, "editaccount.html", {
+            'form': form,
+            'formpass' : formpass,
+            'student': student,  
+        })
+
+    def post(self, request):
+
+        student = Student.objects.get(student_user=request.user)
+        form = ProfileForm(request.POST, request.FILES, instance=student)
+
+        if form.is_valid():
+            form.save()  # บันทึกข้อมูลที่แก้ไข
+            messages.success(request, "update profile successfully")
+            return redirect('profile')  # เปลี่ยนเส้นทางไปยังหน้าดูโปรไฟล์
+        
+        return render(request, "editaccount.html", {
+            'form': form,
+            'student': student,
+        })
+
+class PasswordChangeView(View):
+
+    def post(self, request):
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Your password has been changed successfully.")
+            return redirect('profile')  # Redirect ไปหน้าโปรไฟล์หรือหน้าอื่นที่ต้องการ
+        else:
+            messages.error(request, "There was an error with your form. Please try again.")
+            return render(request, 'account/password_change.html', {
+                'form': form
+            })
