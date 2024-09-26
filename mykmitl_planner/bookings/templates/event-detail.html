@@ -1,0 +1,58 @@
+{% extends "layoutRe.html" %}
+{% load static %}
+
+{% block title %}Event Details{% endblock %}
+
+{% block content %}
+<!-- Container -->
+<div class="max-width-full container mx-auto p-5 ">
+    <!-- Event Header -->
+    <h2 class="text-3xl font-bold mb-6">{{ event.name }}</h2>
+
+    <!-- Event Image -->
+    <div class="mb-6">
+        {% if event.event_image %}
+        <img src="{{ event.event_image.url }}" alt="{{ event.name }}" class="w-full h-[300px] object-cover rounded-lg shadow-lg">
+        {% else %}
+        <img src="{% static 'images/default-event.jpg' %}" alt="{{ event.name }}" class="w-full h-[300px] object-cover rounded-lg shadow-lg">
+        {% endif %}
+    </div>
+
+    <!-- Event Details -->
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <!-- Description -->
+        <div class="mb-4">
+            <h3 class="text-xl font-semibold">รายละเอียดกิจกรรม:</h3>
+            <p class="text-gray-700 text-base">{{ event.description }}</p>
+        </div>
+
+        <!-- Date and Time -->
+        <div class="mb-4">
+            <h3 class="text-xl font-semibold">วันและเวลา:</h3>
+            <p class="text-gray-700 text-base">เริ่มต้น: {{ event.start_time|date:"d/m/Y H:i" }}</p>
+            <p class="text-gray-700 text-base">สิ้นสุด: {{ event.end_time|date:"d/m/Y H:i" }}</p>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-4">
+            <h3 class="text-xl font-semibold">สถานที่:</h3>
+            <p class="text-gray-700 text-base">{{ event.location }}</p>
+        </div>
+
+        <!-- Status -->
+        <div class="mb-4">
+            <h3 class="text-xl font-semibold">สถานะ:</h3>
+            <p class="text-gray-700 text-base">{{ event.get_status_display }}</p>
+        </div>
+
+        <!-- Participants -->
+        <div class="mb-4">
+            <h3 class="text-xl font-semibold">จำนวนผู้เข้าร่วม (สูงสุด):</h3>
+            <p class="text-gray-700 text-base">{{ event.participants }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+</body>
+</html>

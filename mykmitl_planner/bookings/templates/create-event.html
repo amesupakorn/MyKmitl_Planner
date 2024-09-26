@@ -1,0 +1,77 @@
+{% extends "layoutRe.html" %}
+{% load static %}
+
+{% block title %}Create Activities{% endblock %}
+
+{% block content %}
+
+  <!-- Container -->
+  <div class="max-width-full container overflow-y-auto p-5 ">
+    <!-- Form Header -->
+    <h2 class="text-3xl font-bold mb-6">Create Activities</h2>
+
+    <!-- Form -->
+    <form action="#" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-lg">
+      
+      <!-- Activity Image -->
+        <div class="mb-4">
+            <label for="image" class="block text-gray-700 font-bold mb-2">ภาพกิจกรรม:</label>
+            <input type="file" id="image" name="event_image" class="w-full p-2 border border-gray-300 rounded-lg" accept="image/*" required>
+        </div>
+
+      <!-- Activity Name -->
+        <div class="mb-4">
+            <label for="name" class="block text-gray-700 font-bold mb-2">ชื่อกิจกรรม:</label>
+            <input type="text" id="name" name="name" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="ใส่ชื่อกิจกรรม" required>
+        </div>
+
+      <!-- Activity Description -->
+        <div class="mb-4">
+            <label for="description" class="block text-gray-700 font-bold mb-2">รายละเอียดกิจกรรม:</label>
+            <textarea id="description" name="description" rows="4" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="ใส่รายละเอียดกิจกรรม" required></textarea>
+        </div>
+
+      <!-- Start Date and Time -->
+        <div class="mb-4">
+            <label for="start_time" class="block text-gray-700 font-bold mb-2">วันและเวลาเริ่มต้น:</label>
+            <input type="datetime-local" id="start_time" name="start_time" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+
+      <!-- End Date and Time -->
+        <div class="mb-4">
+            <label for="end_time" class="block text-gray-700 font-bold mb-2">วันและเวลาปิด:</label>
+            <input type="datetime-local" id="end_time" name="end_time" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+
+      <!-- Location -->
+        <div class="mb-4">
+            <label for="location" class="block text-gray-700 font-bold mb-2">สถานที่:</label>
+            <input type="text" id="location" name="location" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="ใส่สถานที่จัดกิจกรรม" required>
+        </div>
+
+      <!-- Status -->
+        <div class="mb-4">
+            <label for="status" class="block text-gray-700 font-bold mb-2">สถานะ:</label>
+            <select id="status" name="status" class="w-full p-2 border border-gray-300 rounded-lg" required>
+            <option value="upcoming">กำลังจะมาถึง</option>
+            <option value="ongoing">กำลังดำเนินการ</option>
+            <option value="completed">เสร็จสิ้นแล้ว</option>
+            </select>
+        </div>
+
+      <!-- Participant Limit -->
+        <div class="mb-4">
+            <label for="participants" class="block text-gray-700 font-bold mb-2">จำนวนผู้เข้าร่วม (สูงสุด):</label>
+            <input type="number" id="participants" name="participants" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="ใส่จำนวนผู้เข้าร่วม" required>
+        </div>
+
+      <!-- Submit Button -->
+        <div class="flex justify-end">
+            <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">Create Activity</button>
+        </div>
+      
+    </form>
+  </div>
+  {% endblock %}
+</body>
+</html>

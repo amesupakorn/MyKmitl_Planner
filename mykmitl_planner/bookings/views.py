@@ -6,6 +6,20 @@ from .models import *
 class RecommendListPage(View):
     
     def get(self, request):
-        return render(request, "recommend-list.html",{
+        return render(request, "event-list.html",{
+
+        })
+    
+class CreateEventPage(View):
+    
+    def get(self, request):
+        return render(request, "create-event.html",{
+
+        })
+
+class EventDetailPage(View):
+    
+    def get(self, request):
+        return render(request, "event-detail.html",{
 
         })
