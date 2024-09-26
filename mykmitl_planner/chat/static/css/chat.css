@@ -6,8 +6,6 @@
     --right-msg-bg: #ff7626;
   }
   
-
-  
   .msger {
     display: flex;
     flex-flow: column wrap;
@@ -21,7 +19,6 @@
     box-shadow: 0 15px 15px -5px rgba(0, 0, 0, 0.2);
     margin: auto;
   }
-  
   
   .msger-chat {
     flex: 1;
@@ -88,13 +85,11 @@
     padding: 10px;
     border-top: var(--border);
     background: #eee;
-    border-radius: 10%;
   }
   .msger-inputarea * {
     padding: 10px;
     border: none;
     font-size: 1em;
-    border-radius: 10%;
   
   }
   .msger-input {
