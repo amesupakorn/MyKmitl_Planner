@@ -1,68 +1,40 @@
 
-/* Custom Dropdown Style */
-.custom-dropdown {
-    position: relative;
-    display: inline-block;
-    width: 100%;
+
+#calendar-container {
+    display: flex;
+    transition: all 0.3s ease;
 }
 
-.dropdown-btn {
-    background-color: #fff;
-    border: 1px solid black;
-    padding: 10px;
-    border-radius: 5px;
-    width: 100%;
-    cursor: pointer;
+#calendar-wrapper {
+    width: 100%; /* Calendar takes full width initially */
+    transition: all 0.3s ease;
 }
 
-.dropdown-options {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: 5px;
-    width: 100%;
-    z-index: 1;
+#calendar-wrapper.reduced {
+    width: 70%; /* Reduce to 75% when form is shown */
 }
 
-.dropdown-options div {
-    padding: 5px;
-    cursor: pointer;
+#create-event {
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+#create-event.open {
+    width: 30%; /* Show sidebar when open */
+}
+
+.flex {
     display: flex;
     align-items: center;
 }
 
-.dropdown-options div:hover {
-    background-color: #f1f1f1;
+#close-form-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
 }
 
-.dropdown-options div span {
-    margin-left: 10px;
-}
-
-/* Color Options */
-.LightSkyBlue {
-    background-color: #87CEFA;
-    color: black;
-}
-
-.LawnGreen {
-    background-color: #afeb5c;
-    color: black;
-}
-
-.PowderPink {
-    background-color: #FFB2D0;
-    color: black;
-}
-
-.BrightLilac {
-    background-color: #D891EF;
-    color: black;
-}
-
-.gold {
-    background-color: #ffe038;
-    color: black;
+#close-form-btn:hover {
+    transform: scale(1.1);
 }

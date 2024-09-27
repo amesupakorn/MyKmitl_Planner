@@ -1,5 +1,6 @@
 let selectedEvent = null; // To store the event being edited
 
+
 $(document).ready(function() {
     $('#calendar').fullCalendar({
         header: {
@@ -8,34 +9,38 @@ $(document).ready(function() {
             right: 'month,agendaWeek,agendaDay'
         },
         editable: true,
-        eventLimit: 3,  // จำกัดการแสดง event ต่อวัน
+        eventLimit: 3, // Limit events per day
 
+        // Event click (show form and populate data)
         eventClick: function(event) {
-            selectedEvent = event; // Store the event clicked
+            selectedEvent = event;
             $('#event-name').val(event.title);
             $('#start-date').val(moment(event.start).format('YYYY-MM-DD HH:mm'));
             $('#end-date').val(event.end ? moment(event.end).format('YYYY-MM-DD HH:mm') : '');
-            $('#selected-color').css('background-color', event.color);
             $('#color-value').val(event.color);
-            $('#event-id').val(event._id); // Store event ID
-            $('#add-event').removeClass('hidden');
-            $('#delete-btn').removeClass('hidden'); // Show delete button
+            $('#event-id').val(event._id);
+
+            // Show form
+            $('#create-event').addClass('open').removeClass('hidden');
+            $('#calendar-wrapper').addClass('reduced');
         },
 
+        // Day click (show empty form for new event)
         dayClick: function(date) {
-            selectedEvent = null; // Clear selected event
+            selectedEvent = null;
             $('#event-name').val('');
             $('#start-date').val(date.format('YYYY-MM-DD HH:mm'));
             $('#end-date').val('');
-            $('#selected-color').css('background-color', '');
             $('#color-value').val('');
-            $('#event-id').val(''); // Clear event ID
-            $('#add-event').removeClass('hidden');
-            $('#delete-btn').addClass('hidden'); // Hide delete button for new event
+            $('#event-id').val('');
+
+            // Show form
+            $('#create-event').addClass('open').removeClass('hidden');
+            $('#calendar-wrapper').addClass('reduced');
         }
     });
 
-    // Setup Flatpickr for Start Date and End Date with time selection
+    // Setup Flatpickr for Start Date and End Date
     flatpickr('#start-date', {
         enableTime: true,
         dateFormat: "Y-m-d H:i"
@@ -67,47 +72,21 @@ $(document).ready(function() {
             $('#calendar').fullCalendar('renderEvent', eventData, true);
         }
 
-        // Clear form
+        // Hide form after saving
         $('#add-event')[0].reset();
-        $('#add-event').addClass('hidden');
+        $('#create-event').removeClass('open').addClass('hidden');
+        $('#calendar-wrapper').removeClass('reduced');
     });
 
     // Delete Event
     $('#delete-btn').on('click', function() {
         if (selectedEvent) {
             $('#calendar').fullCalendar('removeEvents', selectedEvent._id);
-            $('#add-event').addClass('hidden');
-        }
-    });
-
-    // Toggle dropdown for color selection
-    const dropdownBtn = document.querySelector('.dropdown-btn');
-    const dropdownOptions = document.querySelector('.dropdown-options');
-    dropdownBtn.addEventListener('click', () => {
-        dropdownOptions.style.display = dropdownOptions.style.display === 'block' ? 'none' : 'block';
-    });
-
-    // Select a color option
-    dropdownOptions.querySelectorAll('div').forEach(option => {
-        option.addEventListener('click', () => {
-            const color = option.getAttribute('data-color');
-            const colorName = option.querySelector('span').innerText;
-
-            dropdownBtn.innerText = colorName;
-            dropdownBtn.style.backgroundColor = color;
-            $('#color-value').val(color); // Update hidden input with the selected color value
-            dropdownOptions.style.display = 'none';
-        });
-    });
-
-    // Close dropdown if clicked outside
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.custom-dropdown')) {
-            dropdownOptions.style.display = 'none';
+            $('#create-event').removeClass('open').addClass('hidden');
+            $('#calendar-wrapper').removeClass('reduced');
         }
     });
 });
-
 
 
 
@@ -120,4 +99,13 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => { messageBox.style.display = 'none'; }, 1000); // Hide after fade out
         }
     }, 3000); // 5 วินาที
+});
+
+$(document).ready(function() {
+    // Close form when clicking the close button
+    $('#close-form-btn').on('click', function() {
+        $('#create-event').addClass('hidden');  // Hide the form
+        $('#calendar-wrapper').removeClass('reduced');  // Expand the calendar
+        $('#add-event')[0].reset();  // Reset the form fields
+    });
 });

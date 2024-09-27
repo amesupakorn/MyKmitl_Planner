@@ -1,12 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import render,redirect
 from django.views import View
-
 from allauth.account.forms import SignupForm, LoginForm
 from allauth.account.forms import ResetPasswordForm, SetPasswordForm
-from django.contrib.auth.forms import PasswordResetForm
-
-
 from django.contrib.auth import login, logout  # Import Django's login function
 from planner.models import Student
 from django.views.generic import TemplateView
@@ -14,9 +10,6 @@ from django.contrib.auth.models import User
 from .forms import ProfileForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-
-from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
-from django.urls import reverse_lazy
 
 
 class SignInPage(View):
