@@ -56,6 +56,8 @@ class Event(models.Model):
     end_time = models.DateTimeField()
     status = models.CharField(max_length=20)
     facility = models.ManyToManyField(Facility)
+    event_image = models.ImageField(upload_to='event_pics/', null=True, blank=True)
+
     
     def __str__(self):
         return self.name
