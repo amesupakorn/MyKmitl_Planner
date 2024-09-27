@@ -35,7 +35,7 @@
                     <a href="{% url 'planner_dashboard' %}" class="text-white text-1xl px-3 font-semibold uppercase hover:text-gray-300">Mykmitl Planner</a>
                 </div>
                 <nav class="text-white text-base font-semibold pt-3">
-                    <a href="{% url 'planner_dashboard' %}" class="flex items-center opacity-75 hover:opacity-100 text-white py-4 pl-6 nav-item">
+                    <a href="{% url 'planner_dashboard' %}" class="flex items-center active-nav-link hover:opacity-100 text-white py-4 pl-6 nav-item">
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Calendar
                     </a>
@@ -58,7 +58,7 @@
         <div class="w-full flex flex-col h-screen overflow-y-hidden">
 
         {% block nav %}
-            <header class="w-full items-center bg-white py-2 px-6 hidden sm:flex">
+            <header class="account w-full items-center bg-white py-2 px-6 hidden sm:flex">
                 <div class="w-1/2"></div>
                 
                 <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
@@ -80,10 +80,11 @@
                     {% endif %}
                     <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
 
-                    <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
+                    <div x-show="isOpen" class="account absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-48 mr-8" style="z-index: 9999;">
                         <a href="{% url 'profile' %}" class="block px-4 py-2 account-link hover:text-white">Account</a>
                         <a href="{% url 'account_logout' %}" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
                     </div>
+                    
                 </div>
             </header>
 
@@ -136,7 +137,7 @@
                     </div>
                 {% endif %}
             </div>
-            
+
         {% endblock %}
 
         {% block content %}
