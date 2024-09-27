@@ -25,7 +25,7 @@
     {% tailwind_css %}
     
 </head>
-<body class="bg-gray-50 font-family-karla flex">
+<body class="bg-gray-100 font-family-karla flex overflow-y-auto">
 
     <div class="flex justify-center items-center mt-4">
         {% if messages %}
@@ -58,7 +58,7 @@
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Calendar
                     </a>
-                    <a href="{% url 'book-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <a href="{% url 'book-list' %}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                         <i class="fas fa-map-marker-alt mr-3"></i>
                         Booking
                     </a>
@@ -79,28 +79,23 @@
         {% block nav %}
             <header class="w-full items-center bg-white py-2 px-6 hidden sm:flex">
                 <div class="w-1/2"></div>
-                
                 <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
-                  
                     {% if user.is_authenticated %}
                     <!-- เมื่อผู้ใช้ล็อกอินแล้ว แสดงชื่อผู้ใช้ -->
                         <button @click="isOpen = !isOpen" class="relative z-10 bg-transparent hover:bg-gray-100 focus:bg-gray-100 focus:outline-none px-4 py-2">
                             <a>{{ user.username }}</a>
                         </button>
+                       
                     {% else %}
                         <button @click="isOpen = !isOpen" class="relative z-10 bg-transparent hover:bg-gray-100 focus:bg-gray-100 focus:outline-none px-4 py-2">
                             <a>admin</a>
                         </button>
-                    {% endif %}
-                    {% if student.profile_picture %}
-                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ student.profile_picture.url }}" alt="Profile Picture">
-                    {% else %}
-                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
+
                     {% endif %}
                     <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
 
                     <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
-                        <a href="{% url 'profile' %}" class="block px-4 py-2 account-link hover:text-white">Account</a>
+                        <a href="#" class="block px-4 py-2 account-link hover:text-white">Account</a>
                         <a href="{% url 'account_logout' %}" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
                     </div>
                 </div>
@@ -118,11 +113,11 @@
 
                 <!-- Dropdown Nav -->
                 <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
-                    <a href="{% url 'planner_dashboard' %}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+                    <a href="{% url 'planner_dashboard' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Calendar
                     </a>
-                    <a href="{% url 'book-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <a href="{% url 'book-list' %}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                         <i class="fas fa-map-marker-alt mr-3"></i>
                         Booking
                     </a>
@@ -153,6 +148,7 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 </body>
 
 </body>

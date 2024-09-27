@@ -1,0 +1,46 @@
+{% extends "booking/layoutBo.html" %}
+{% load static %}
+
+{% block title %}Booking{% endblock %}
+
+{% block content %}
+    <div class="container mx-auto max-w-4xl p-6 overflow-y-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-4">
+            <h1 class="text-2xl font-bold">Booking</h1>
+            <a href="{% url 'upcoming' %}" class="text-orange-500 border border-orange-500 px-4 py-1 rounded hover:bg-orange-500 hover:text-white">Your booking</a>
+        </div>
+
+        <!-- List of Services -->
+        <ul class="space-y-4">
+            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
+                <span>KMITL Lifelong Learning Center</span>
+                <span class="text-gray-500">&gt;</span>
+            </li>
+            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
+                <span>KMITL Sport Center</span>
+                <span class="text-gray-500">&gt;</span>
+            </li>
+            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
+                <span>School of Information Technology KMITL</span>
+                <span class="text-gray-500">&gt;</span>
+            </li>
+            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
+                <span>School of Science</span>
+                <span class="text-gray-500">&gt;</span>
+            </li>
+            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
+                <span>KMITL School of Architecture</span>
+                <span class="text-gray-500">&gt;</span>
+            </li>
+            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
+                <span>Faculty of Engineering</span>
+                <span class="text-gray-500">&gt;</span>
+            </li>
+        </ul>
+    </div>
+
+{% endblock %}
+
+</body>
+</html>
