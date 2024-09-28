@@ -19,6 +19,7 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Facility Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location Name</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Open Time</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Close Time</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
@@ -29,14 +30,13 @@
                     <!-- Facility Row 1 -->
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">Badminton Court</td>
+                        <td class="px-6 py-4 whitespace-nowrap">Sport Center</td>
                         <td class="px-6 py-4 whitespace-nowrap">08:00 AM</td>
                         <td class="px-6 py-4 whitespace-nowrap">10:00 PM</td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <select class="status-dropdown bg-gray-100 p-2 rounded">
-                                <option value="open">Open</option>
-                                <option value="closed">Closed</option>
-                                <option value="maintenance">Under Maintenance</option>
-                            </select>
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                Upcoming
+                            </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <button class="edit-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700">Edit</button>
@@ -47,14 +47,13 @@
                     <!-- Facility Row 2 -->
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">Basketball Court</td>
+                        <td class="px-6 py-4 whitespace-nowrap">Sport Center</td>
                         <td class="px-6 py-4 whitespace-nowrap">08:00 AM</td>
                         <td class="px-6 py-4 whitespace-nowrap">08:00 PM</td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <select class="status-dropdown bg-gray-100 p-2 rounded">
-                                <option value="open">Open</option>
-                                <option value="closed">Closed</option>
-                                <option value="maintenance">Under Maintenance</option>
-                            </select>
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Open
+                            </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <button class="edit-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700">Edit</button>
@@ -65,14 +64,13 @@
                     <!-- Facility Row 3 -->
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">Football Field</td>
+                        <td class="px-6 py-4 whitespace-nowrap">Sport Center</td>
                         <td class="px-6 py-4 whitespace-nowrap">06:00 AM</td>
                         <td class="px-6 py-4 whitespace-nowrap">09:00 PM</td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <select class="status-dropdown bg-gray-100 p-2 rounded">
-                                <option value="open">Open</option>
-                                <option value="closed">Closed</option>
-                                <option value="maintenance">Under Maintenance</option>
-                            </select>
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                Closed
+                            </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <button class="edit-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700">Edit</button>
@@ -94,12 +92,25 @@
                     <input type="text" id="facilityName" class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
                 <div class="mb-4">
+                    <label for="facilityName" class="block text-gray-700">location Name</label>
+                    <input type="text" id="facilityName" class="w-full p-2 border border-gray-300 rounded-lg">
+                </div>
+                <div class="mb-4">
                     <label for="openTime" class="block text-gray-700">Open Time</label>
                     <input type="time" id="openTime" class="w-full p-2 border border-gray-300 rounded-lg">
                 </div>
                 <div class="mb-4">
                     <label for="closeTime" class="block text-gray-700">Close Time</label>
                     <input type="time" id="closeTime" class="w-full p-2 border border-gray-300 rounded-lg">
+                </div>
+                <div>
+                    <label for="openTime" class="block text-gray-700">Status</label>
+                    <select class="status-dropdown p-2 border border-gray-300 rounded-lg">
+                        <option value="">Select Status</option>
+                        <option value="open">Open</option>
+                        <option value="closed">Closed</option>
+                        <option value="maintenance">Under Maintenance</option>
+                    </select>
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="cancel-btn bg-red-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
