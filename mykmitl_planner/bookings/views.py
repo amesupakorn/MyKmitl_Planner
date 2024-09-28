@@ -2,25 +2,11 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .models import *
 
-# Create your views here.
+# Event
 class EventListPage(View):
     
     def get(self, request):
         return render(request, "event/event-list.html",{
-
-        })
-    
-class CreateEventPage(View):
-    
-    def get(self, request):
-        return render(request, "event/create-event.html",{
-
-        })
-
-class EditEventPage(View):
-    
-    def get(self, request):
-        return render(request, "event/edit-event.html",{
 
         })
     
@@ -31,7 +17,22 @@ class EventDetailPage(View):
 
         })
     
+class CreateEventPage(View):
+    
+    def get(self, request):
+        return render(request, "event/staff/create-event.html",{
 
+        })
+
+class EditEventPage(View):
+    
+    def get(self, request):
+        return render(request, "event/staff/edit-event.html",{
+
+        })
+    
+
+# Booking
 class BookingListPage(View):
     
     def get(self, request):
@@ -74,9 +75,23 @@ class PastBookPage(View):
 
         })
     
-class PastDetailPage(View):
+class BookDetailPage(View):
     
     def get(self, request):
-        return render(request, "booking/past-detail.html",{
+        return render(request, "booking/book-detail.html",{
+
+        })
+    
+class StaffBookPage(View):
+    
+    def get(self, request):
+        return render(request, "booking/staff/book-staff.html",{
+
+        })
+    
+class FacilitiesPage(View):
+    
+    def get(self, request):
+        return render(request, "facilities/facilities.html",{
 
         })

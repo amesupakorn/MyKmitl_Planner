@@ -6,7 +6,7 @@ from .models import *
 class ChatListPage(View):
     
     def get(self, request):
-        return render(request, "chat-list.html",{
+        return render(request, "staff/chat-list.html",{
 
         })
 

@@ -13,5 +13,8 @@ urlpatterns = [
     path('book-third/', views.BookThirdPage.as_view(), name='book-third'),
     path("upcoming/", views.UpcomingBookPage.as_view(), name="upcoming"),
     path('past-book/', views.PastBookPage.as_view(), name='past-book'),
-    path('past-detail/', views.PastDetailPage.as_view(), name='past-detail'),
+    path('book-detail/', views.BookDetailPage.as_view(), name='book-detail'),
+    path('book-staff/', views.StaffBookPage.as_view(), name='book-staff'),
+
+    path('facilities/', views.FacilitiesPage.as_view(), name='facilities'),
 ]
