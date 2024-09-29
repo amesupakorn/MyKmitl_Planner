@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from .forms import ProfileForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.db import transaction
 
 
 class SignInPage(View):
@@ -59,25 +60,27 @@ class SignUpPage(View):
                 return render(request, "account/signup.html", {'form': form})
 
             try:
-                # บันทึกผู้ใช้
-                user = form.save(self.request)
-                userid = User.objects.get(username=user.username)
-                
-                # สร้างข้อมูล Student
-                Student.objects.create(
-                    student_user=userid,
-                    email=user.email
-                )
-                
-                email_address = user.emailaddress_set.get(email=user.email) 
-                if not email_address.verified:
-                    email_address.send_confirmation(self.request)  # ส่งอีเมลยืนยันอีกครั้งหากยังไม่ได้ยืนยัน
-                
-                messages.success(request, "You have signed up successfully.")
-                return redirect('account_email_confirmation')
+                    user = form.save(self.request)
+                    userid = User.objects.get(username=user.username)
+                    
+                    # สร้างข้อมูล Student
+                    Student.objects.create(
+                        student_user=userid,
+                        email=user.email
+                    )
+                    
+                    email_address = user.emailaddress_set.get(email=user.email) 
+                    if not email_address.verified:
+                        email_address.send_confirmation(self.request)  # ส่งอีเมลยืนยันอีกครั้งหากยังไม่ได้ยืนยัน
+                    
+                    messages.success(request, "You have signed up successfully.")
+                    return redirect('account_email_confirmation')
             except ValueError as e:
+                messages.error(request, f"An error occurred: {str(e)}")
+                print({str(e)})
                 return render(request, "account/signup.html", {'form': form})
         else:
+            messages.error(request, "Please correct the errors below.")
             return render(request, "account/signup.html", {'form': form})
 
 class EmailConfirmationSentView(View):
@@ -166,4 +169,3 @@ class PasswordForgotView(View):
         return render(request, 'account/forgot_password.html', {'form': form})
 
 
-#PasswordResetView: เป็น class ที่จัดการการขอ reset password เมื่อผู้ใช้กรอก email address แล้วระบบจะส่งลิงก์ reset password ไปให้ทางอีเมล.
