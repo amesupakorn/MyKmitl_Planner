@@ -36,11 +36,11 @@ class UniversityStaff(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 class Facility(models.Model):
-    staff = models.ForeignKey('planner.UniversityStaff', on_delete=models.CASCADE)
+    staff = models.ForeignKey('planner.UniversityStaff', on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
-    opening = models.DateTimeField()
-    closing = models.DateTimeField()
+    opening = models.TimeField()
+    closing = models.TimeField()
     location = models.CharField(max_length=100)
     status = models.CharField(max_length=20)
     capacity = models.IntegerField()

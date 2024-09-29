@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render,redirect
 from django.views import View
 from allauth.account.forms import SignupForm, LoginForm
+from allauth.account.forms import ResetPasswordForm, SetPasswordForm
 from django.contrib.auth import login, logout  # Import Django's login function
 from planner.models import Student
 from django.views.generic import TemplateView
@@ -9,6 +10,8 @@ from django.contrib.auth.models import User
 from .forms import ProfileForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+
+
 class SignInPage(View):
     
     def get(self, request):
@@ -128,7 +131,39 @@ class PasswordChangeView(View):
             messages.success(request, "Your password has been changed successfully.")
             return redirect('profile')  # Redirect ไปหน้าโปรไฟล์หรือหน้าอื่นที่ต้องการ
         else:
-            messages.error(request, "There was an error with your form. Please try again.")
+            messages.error(request, "There was an error with your changed password. Please try again.")
             return render(request, 'account/password_change.html', {
                 'form': form
             })
+
+class PasswordForgotView(View):
+    form_class = ResetPasswordForm
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, 'account/forgot_password.html', {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+
+            # ตรวจสอบว่า email มีอยู่ในฐานข้อมูลหรือไม่
+            if not User.objects.filter(email=email).exists():
+                messages.error(request, "This email address is not associated with any account.")
+                return render(request, 'account/forgot_password.html', {'form': form})
+
+            # ถ้ามีอีเมลอยู่ในระบบแล้วให้ทำการส่งคำขอ reset password
+            form.save(
+                request=request,
+                use_https=request.is_secure(),  # ใช้ HTTPS ถ้าเป็น secure request
+                email_template_name='account/email/password_reset_key_message.html'  # อีเมล template
+            )
+            messages.success(request, "Password reset instructions have been sent to your email.")
+            return redirect('account_login')
+
+        # ถ้า form ไม่ valid ให้แสดงข้อผิดพลาด
+        return render(request, 'account/forgot_password.html', {'form': form})
+
+
+#PasswordResetView: เป็น class ที่จัดการการขอ reset password เมื่อผู้ใช้กรอก email address แล้วระบบจะส่งลิงก์ reset password ไปให้ทางอีเมล.

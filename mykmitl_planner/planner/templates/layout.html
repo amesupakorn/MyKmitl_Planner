@@ -27,25 +27,6 @@
 </head>
 <body class="bg-gray-50 font-family-karla flex">
 
-    <div class="flex justify-center items-center mt-4">
-        {% if messages %}
-            <div id="message-box" class="fixed top-5 z-50 bg-white shadow-lg rounded-lg p-4 text-center transition-opacity duration-1000 inline-block max-w-full">
-                {% for message in messages %}
-                    <div class="relative flex items-center justify-center space-x-2 {% if message.tags == 'error' %} text-red-500 {% elif message.tags == 'success' %} text-green-500 {% endif %}">
-                        <div class="text-sm font-medium">{{ message }}</div>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            {% if message.tags == 'error' %}
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            {% elif message.tags == 'success' %}
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            {% endif %}
-                        </svg>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-
         <!-- Header -->
         {% block sidebar %}
             <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
@@ -54,7 +35,7 @@
                     <a href="{% url 'planner_dashboard' %}" class="text-white text-1xl px-3 font-semibold uppercase hover:text-gray-300">Mykmitl Planner</a>
                 </div>
                 <nav class="text-white text-base font-semibold pt-3">
-                    <a href="{% url 'planner_dashboard' %}" class="flex items-center opacity-75 hover:opacity-100 text-white py-4 pl-6 nav-item">
+                    <a href="{% url 'planner_dashboard' %}" class="flex items-center active-nav-link hover:opacity-100 text-white py-4 pl-6 nav-item">
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Calendar
                     </a>
@@ -77,7 +58,7 @@
         <div class="w-full flex flex-col h-screen overflow-y-hidden">
 
         {% block nav %}
-            <header class="w-full items-center bg-white py-2 px-6 hidden sm:flex">
+            <header class="account w-full items-center bg-white py-2 px-6 hidden sm:flex">
                 <div class="w-1/2"></div>
                 
                 <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
@@ -99,10 +80,11 @@
                     {% endif %}
                     <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
 
-                    <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
+                    <div x-show="isOpen" class="account absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-48 mr-8" style="z-index: 9999;">
                         <a href="{% url 'profile' %}" class="block px-4 py-2 account-link hover:text-white">Account</a>
                         <a href="{% url 'account_logout' %}" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
                     </div>
+                    
                 </div>
             </header>
 
@@ -136,6 +118,26 @@
                     </a>
                 </nav>
             </header>
+
+            <div class="flex justify-center items-center mt-4">
+                {% if messages %}
+                    <div id="message-box" class="fixed top-5 z-50 bg-white shadow-lg rounded-lg p-4 text-center transition-opacity duration-1000 inline-block max-w-full">
+                        {% for message in messages %}
+                            <div class="relative flex items-center justify-center space-x-2 {% if message.tags == 'error' %} text-red-500 {% elif message.tags == 'success' %} text-green-500 {% endif %}">
+                                <div class="text-sm font-medium">{{ message }}</div>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    {% if message.tags == 'error' %}
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    {% elif message.tags == 'success' %}
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    {% endif %}
+                                </svg>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
         {% endblock %}
 
         {% block content %}

@@ -55,16 +55,6 @@
                     <label for="login" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                     <div class="relative">
                         <!-- ไอคอน email ด้านซ้าย -->
-                        {% if form.login.errors %}
-                            <span class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z"/>
-                                    <rect x="3" y="5" width="18" height="14" rx="2"/>
-                                    <polyline points="3 7 12 13 21 7"/>
-                                </svg>
-                            </span>
-                            {{ form.login|add_class:"block w-full pl-10 pr-3 py-2 border border-red-500 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm" }}
-                        {% else %}
                             <span class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z"/>
@@ -73,35 +63,20 @@
                                 </svg>
                             </span>
                             {{ form.login|add_class:"block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 sm:text-sm" }}
-                        {% endif %}
                     </div>
                     <!-- แสดงข้อผิดพลาด ถ้ามี -->
-                    {% if form.login.errors %}
-                    <p class="flex text-red-500 text-sm mt-1">
-                        <svg class="h-5 w-5 text-red-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        {{ form.login.errors.0 }}
-                    </p>
-                    {% endif %}
                 </div>
 
                 <!-- Password Field -->
                 <div class="mt-6">
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <div class="flex items-center justify-between">
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <div class="text-sm">
+                            <a href="{% url 'account_forgot_password' %}" class="font-semibold text-orange-600 hover:text-orange-500">Forgot password?</a>
+                        </div>                    
+                    </div>
                     <div class="relative">
                         <!-- ไอคอน password ด้านซ้าย -->
-                        
-                        {% if form.password.errors %}
-                            <span class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="5" y="11" width="14" height="10" rx="2"/>
-                                    <circle cx="12" cy="16" r="1"/>
-                                    <path d="M8 11v-4a4 4 0 0 1 8 0v4"/>
-                                </svg>
-                            </span>
-                            {{ form.password|add_class:"block w-full pl-10 pr-3 py-2 border border-red-500 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm" }}
-                        {% else %}
                             <span class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="5" y="11" width="14" height="10" rx="2"/>
@@ -110,24 +85,12 @@
                                 </svg>
                             </span>
                             {{ form.password|add_class:"block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 sm:text-sm" }}
-                        {% endif %}
                     </div>
-                    {% if form.password.errors %}
-                    <p class="flex text-red-500 text-sm mt-1">
-                        <svg class="h-5 w-5 text-red-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        {{ form.password.errors.0 }}
-                    </p>
-                    {% endif %}
-                </div>
+    
 
-                <div class="flex items-center justify-between">
-                    <div class="text-sm">
-                        <a href="{% url 'account_reset_password' %}" class="font-semibold text-orange-600 hover:text-orange-500">Forgot password?</a>
-                    </div>
-                </div>
+                    
 
+                </div>
                 <div>
                     <button type="submit" class="flex w-full justify-center rounded-md bg-orange-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500">
                         Sign In
