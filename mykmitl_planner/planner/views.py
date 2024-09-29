@@ -13,7 +13,6 @@ class CalendarPage(View):
     def get(self, request):
         student = Student.objects.get(student_user=request.user)  # ดึงข้อมูลนักเรียนที่ล็อกอินอยู่
         schedules = Schedule.objects.filter(student=student)  # ดึงข้อมูลตารางกิจกรรมของนักเรียน
-        form = CalendarForm()  # สร้างฟอร์มว่างสำหรับการเพิ่มกิจกรรมใหม่
 
         events_list = []
         for event in schedules:
@@ -27,11 +26,13 @@ class CalendarPage(View):
                 'activity': event.event.id if event.event else None, 
                 'color': event.color,
             })
+
         return render(request, "calendar.html", {
             'student': student,
             'form': CalendarForm(),
             'events': json.dumps(events_list)  # แปลง events เป็น JSON string เพื่อใช้ใน JavaScript
         })
+        
         
     def post(self, request):
         
@@ -106,15 +107,10 @@ class CalendarPage(View):
     def delete(self, request, event_id):
         try:
             student = Student.objects.get(student_user=request.user)
-        except Student.DoesNotExist:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Student not found'
-            }, status=404)
-
-        try:
+            
             schedule = Schedule.objects.get(id=event_id, student=student)
             schedule.delete()  # ลบกิจกรรมจากฐานข้อมูล
+            
             return JsonResponse({
                 'status': 'success',
                 'message': 'Event deleted successfully!'

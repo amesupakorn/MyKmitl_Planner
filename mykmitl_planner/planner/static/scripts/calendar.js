@@ -9,7 +9,8 @@ $(document).ready(function() {
         },
         editable: true,
         eventLimit: 3, 
-        events: events,
+        
+        events: eventdjango,
         
         
         // Event click (show form and populate data)
@@ -32,10 +33,9 @@ $(document).ready(function() {
 
         // Day click (show empty form for new event)
         dayClick: function(date) {
-            const currentDateTime = moment().format('YYYY-MM-DD HH:mm');            
             selectedEvent = null;
             $('#event-name').val('');
-            $('#start-date').val(currentDateTime);
+            $('#start-date').val(date.format('YYYY-MM-DD HH:mm'));
             $('#end-date').val('');
             $('#description').val('');
             $('#location').val('');
@@ -58,7 +58,7 @@ $(document).ready(function() {
         e.preventDefault();
             let eventData = {
                 event_id: selectedEvent ? selectedEvent.id : null,               
-                title: $('#event-name').val(),  // ใช้ id ที่ Django Forms กำหนด (มักจะเป็น id_field_name)
+                title: $('#event-name').val(),  
                 start_time: moment($('#start-date').val()).format('YYYY-MM-DD HH:mm'),
                 end_time: moment($('#end-date').val()).format('YYYY-MM-DD HH:mm'),
                 description: $('#description').val(),
@@ -85,22 +85,7 @@ $(document).ready(function() {
                 }
                 return response.json();
             })
-            .then(data => {
-                // หากมี event-id แสดงว่ากำลัง update event
-                if ($('#event-id').val()) {
-                    selectedEvent.title = eventData.title;
-                    selectedEvent.start = eventData.start_time;
-                    selectedEvent.end = eventData.end_time ? eventData.en_time : null;
-                    selectedEvent.description = eventData.description;
-                    selectedEvent.location = eventData.location;
-                    selectedEvent.activity = eventData.activity;
-                    selectedEvent.color = eventData.color;
-                    $('#calendar').fullCalendar('updateEvent', selectedEvent);
-                } else {
-                    // สร้าง event ใหม่ใน FullCalendar
-                    $('#calendar').fullCalendar('renderEvent', eventData, true);
-    
-                }          
+            .then(data => {       
                 // Reset form และซ่อนฟอร์มหลังจากบันทึก
                 $('#add-event')[0].reset();
                 $('#create-event').removeClass('open').addClass('hidden');
@@ -118,7 +103,6 @@ $(document).ready(function() {
       $('#delete-btn').on('click', function() {
         if (selectedEvent) {
             // ลบกิจกรรมออกจาก FullCalendar
-            $('#calendar').fullCalendar('removeEvents', selectedEvent.id);  // ใช้ selectedEvent.id ในการลบ
             $('#create-event').removeClass('open').addClass('hidden');
             $('#calendar-wrapper').removeClass('reduced');
 
@@ -138,7 +122,7 @@ $(document).ready(function() {
                 return response.json();
             })
             .then(data => {
-            
+
             })
             .catch(error => {
                 console.error('Error:', error);
