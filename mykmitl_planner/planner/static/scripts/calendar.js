@@ -1,28 +1,34 @@
 let selectedEvent = null; // To store the event being edited
 
-
 $(document).ready(function() {
     $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay'
+            right: 'month,agendaWeek,agendaDay,listWeek'
         },
         editable: true,
-        eventLimit: 3, // Limit events per day
-
+        eventLimit: 3, 
+        
+        events: eventdjango,
+        
+        
         // Event click (show form and populate data)
         eventClick: function(event) {
             selectedEvent = event;
             $('#event-name').val(event.title);
             $('#start-date').val(moment(event.start).format('YYYY-MM-DD HH:mm'));
-            $('#end-date').val(event.end ? moment(event.end).format('YYYY-MM-DD HH:mm') : '');
+            $('#end-date').val(moment(event.end).format('YYYY-MM-DD HH:mm'));
+            $('#description').val(event.description);
+            $('#location').val(event.location);
+            $('#activity').val(event.activity);
             $('#color-value').val(event.color);
             $('#event-id').val(event._id);
 
             // Show form
             $('#create-event').addClass('open').removeClass('hidden');
             $('#calendar-wrapper').addClass('reduced');
+            $('#delete-btn').removeClass('hidden')
         },
 
         // Day click (show empty form for new event)
@@ -31,62 +37,102 @@ $(document).ready(function() {
             $('#event-name').val('');
             $('#start-date').val(date.format('YYYY-MM-DD HH:mm'));
             $('#end-date').val('');
+            $('#description').val('');
+            $('#location').val('');
+            $('#activity').val('');
             $('#color-value').val('');
             $('#event-id').val('');
 
             // Show form
             $('#create-event').addClass('open').removeClass('hidden');
             $('#calendar-wrapper').addClass('reduced');
+            $('#delete-btn').addClass('hidden')
+
         }
     });
 
-    // Setup Flatpickr for Start Date and End Date
-    flatpickr('#start-date', {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i"
-    });
-    flatpickr('#end-date', {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i"
-    });
+ 
 
     // Save Event (Create or Update)
     $('#add-event').on('submit', function(e) {
         e.preventDefault();
-        let eventData = {
-            title: $('#event-name').val(),
-            start: $('#start-date').val(),
-            end: $('#end-date').val(),
-            color: $('#color-value').val()
-        };
+            let eventData = {
+                event_id: selectedEvent ? selectedEvent.id : null,               
+                title: $('#event-name').val(),  
+                start_time: moment($('#start-date').val()).format('YYYY-MM-DD HH:mm'),
+                end_time: moment($('#end-date').val()).format('YYYY-MM-DD HH:mm'),
+                description: $('#description').val(),
+                location: $('#location').val(),
+                activity: $('#activity').val(),
+                color: $('#color-value').val(), 
+                csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+            };
 
-        if ($('#event-id').val()) {
-            // Update existing event
-            selectedEvent.title = eventData.title;
-            selectedEvent.start = eventData.start;
-            selectedEvent.end = eventData.end ? eventData.end : null;
-            selectedEvent.color = eventData.color;
-            $('#calendar').fullCalendar('updateEvent', selectedEvent);
-        } else {
-            // Create new event
-            $('#calendar').fullCalendar('renderEvent', eventData, true);
-        }
+            let url = $('#add-event').attr('action');
 
-        // Hide form after saving
-        $('#add-event')[0].reset();
-        $('#create-event').removeClass('open').addClass('hidden');
-        $('#calendar-wrapper').removeClass('reduced');
-    });
-
-    // Delete Event
-    $('#delete-btn').on('click', function() {
+            // ส่งข้อมูลไปยัง server ผ่าน Fetch API
+            fetch(url, {
+                method: 'POST',  // ใช้ POST method
+                headers: {
+                    'Content-Type': 'application/json',  // ส่งข้อมูลเป็น JSON
+                    'X-CSRFToken': eventData.csrfmiddlewaretoken  // ส่ง CSRF token เพื่อป้องกัน CSRF attacks
+                },
+                body: JSON.stringify(eventData)  // แปลงข้อมูลเป็น JSON
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {       
+                // Reset form และซ่อนฟอร์มหลังจากบันทึก
+                $('#add-event')[0].reset();
+                $('#create-event').removeClass('open').addClass('hidden');
+                $('#calendar-wrapper').removeClass('reduced');
+            
+                window.location.reload(); 
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error saving the event. Please try again.');
+            });
+        });
+        
+      // Delete Event (เพิ่มโค้ดสำหรับการลบที่นี่)
+      $('#delete-btn').on('click', function() {
         if (selectedEvent) {
-            $('#calendar').fullCalendar('removeEvents', selectedEvent._id);
+            // ลบกิจกรรมออกจาก FullCalendar
             $('#create-event').removeClass('open').addClass('hidden');
             $('#calendar-wrapper').removeClass('reduced');
+
+            // หากต้องการลบกิจกรรมจากฐานข้อมูลด้วย
+            let deleteUrl = 'delete/' + selectedEvent.id + '/';  // URL สำหรับลบ event
+            
+            fetch(deleteUrl, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error deleting the event. Please try again.');
+            });
         }
     });
 });
+
+
 
 
 
