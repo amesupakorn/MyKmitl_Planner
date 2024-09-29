@@ -25,7 +25,26 @@
     {% tailwind_css %}
     
 </head>
-<body class="bg-gray-50 font-family-karla flex">
+<body class="bg-gray-100 font-family-karla flex">
+
+    <div class="flex justify-center items-center mt-4">
+        {% if messages %}
+            <div id="message-box" class="fixed top-5 z-50 bg-white shadow-lg rounded-lg p-4 text-center transition-opacity duration-1000 inline-block max-w-full">
+                {% for message in messages %}
+                    <div class="relative flex items-center justify-center space-x-2 {% if message.tags == 'error' %} text-red-500 {% elif message.tags == 'success' %} text-green-500 {% endif %}">
+                        <div class="text-sm font-medium">{{ message }}</div>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            {% if message.tags == 'error' %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            {% elif message.tags == 'success' %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            {% endif %}
+                        </svg>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 
         <!-- Header -->
         {% block sidebar %}
@@ -35,7 +54,7 @@
                     <a href="{% url 'planner_dashboard' %}" class="text-white text-1xl px-3 font-semibold uppercase hover:text-gray-300">Mykmitl Planner</a>
                 </div>
                 <nav class="text-white text-base font-semibold pt-3">
-                    <a href="{% url 'planner_dashboard' %}" class="flex items-center active-nav-link hover:opacity-100 text-white py-4 pl-6 nav-item">
+                    <a href="{% url 'planner_dashboard' %}" class="flex items-center opacity-75 hover:opacity-100 text-white py-4 pl-6 nav-item">
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Calendar
                     </a>
@@ -47,7 +66,7 @@
                         <i class="fas fa-comments mr-3"></i>
                         Chat
                     </a>
-                    <a href="{% url 'event-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <a href="{% url 'event-list' %}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                         <i class="fas fa-building mr-3"></i>
                         Recommend
                     </a>
@@ -58,33 +77,27 @@
         <div class="w-full flex flex-col h-screen overflow-y-hidden">
 
         {% block nav %}
-            <header class="account w-full items-center bg-white py-2 px-6 hidden sm:flex">
+            <header class="w-full items-center bg-white py-2 px-6 hidden sm:flex">
                 <div class="w-1/2"></div>
-                
                 <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
-                  
                     {% if user.is_authenticated %}
                     <!-- เมื่อผู้ใช้ล็อกอินแล้ว แสดงชื่อผู้ใช้ -->
                         <button @click="isOpen = !isOpen" class="relative z-10 bg-transparent hover:bg-gray-100 focus:bg-gray-100 focus:outline-none px-4 py-2">
                             <a>{{ user.username }}</a>
                         </button>
+                       
                     {% else %}
                         <button @click="isOpen = !isOpen" class="relative z-10 bg-transparent hover:bg-gray-100 focus:bg-gray-100 focus:outline-none px-4 py-2">
                             <a>admin</a>
                         </button>
-                    {% endif %}
-                    {% if student.profile_picture %}
-                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ student.profile_picture.url }}" alt="Profile Picture">
-                    {% else %}
-                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
+
                     {% endif %}
                     <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
 
-                    <div x-show="isOpen" class="account absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-48 mr-8" style="z-index: 9999;">
-                        <a href="{% url 'profile' %}" class="block px-4 py-2 account-link hover:text-white">Account</a>
+                    <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
+                        <a href="#" class="block px-4 py-2 account-link hover:text-white">Account</a>
                         <a href="{% url 'account_logout' %}" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
                     </div>
-                    
                 </div>
             </header>
 
@@ -100,7 +113,7 @@
 
                 <!-- Dropdown Nav -->
                 <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
-                    <a href="{% url 'planner_dashboard' %}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+                    <a href="{% url 'planner_dashboard' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Calendar
                     </a>
@@ -108,7 +121,7 @@
                         <i class="fas fa-map-marker-alt mr-3"></i>
                         Booking
                     </a>
-                    <a href="{% url 'chat-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <a href="{% url 'chat-list' %}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                         <i class="fas fa-comments mr-3"></i>
                         Chat
                     </a>
@@ -118,26 +131,6 @@
                     </a>
                 </nav>
             </header>
-
-            <div class="flex justify-center items-center mt-4">
-                {% if messages %}
-                    <div id="message-box" class="fixed top-5 z-50 bg-white shadow-lg rounded-lg p-4 text-center transition-opacity duration-1000 inline-block max-w-full">
-                        {% for message in messages %}
-                            <div class="relative flex items-center justify-center space-x-2 {% if message.tags == 'error' %} text-red-500 {% elif message.tags == 'success' %} text-green-500 {% endif %}">
-                                <div class="text-sm font-medium">{{ message }}</div>
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    {% if message.tags == 'error' %}
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                    {% elif message.tags == 'success' %}
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    {% endif %}
-                                </svg>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-
         {% endblock %}
 
         {% block content %}
@@ -155,6 +148,7 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 </body>
 
 </body>

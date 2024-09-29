@@ -11,6 +11,7 @@ from .forms import ProfileForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.db import transaction
+from django.db import transaction
 
 
 class SignInPage(View):
@@ -171,4 +172,3 @@ class PasswordForgotView(View):
         return render(request, 'account/forgot_password.html', {'form': form})
 
 
-#PasswordResetView: เป็น class ที่จัดการการขอ reset password เมื่อผู้ใช้กรอก email address แล้วระบบจะส่งลิงก์ reset password ไปให้ทางอีเมล.

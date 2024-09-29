@@ -72,7 +72,7 @@ pip install cryptography
 
 pip install fido2
 
-python manage.py tailwind init
+python3 manage.py tailwind init
 
-python -m pip install Pillow
+python3 -m pip install Pillow
 ```

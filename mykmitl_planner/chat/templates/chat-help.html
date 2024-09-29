@@ -1,0 +1,38 @@
+{% extends "layoutchat.html" %}
+{% load static %}
+
+{% block title %}Chat Help{% endblock %}
+
+{% block content %}
+    <section class="max-width-full items-center justify-center ">
+            <!-- Image Section -->
+
+            <div class="mb-8 max-w-sm">
+                <img src="{% static 'images/staff.png' %}" class="rounded-lg w-full">
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-lg font-bold mb-4 text-center">อยากให้เราช่วยเรื่องอะไร บอกมาได้เลย</h1>
+
+            <!-- Button Container -->
+            <div class="space-y-4 max-w-sm max-w-md">
+
+                <!-- Chat Button -->
+                <a href="{% url 'chat' %}" class="flex items-center justify-between bg-white shadow-md rounded-lg p-4 hover:bg-orange-200 transition duration-200">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-comments text-orange-500 text-lg"></i>
+                        <span class="font-medium">แชทกับเจ้าหน้าที่</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+            </div>
+        
+    </section>
+{% endblock %}
+
+{% block script %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+  
+{% endblock %}
+</body>
+</html>

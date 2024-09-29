@@ -1,0 +1,36 @@
+{% extends "booking/layoutBo.html" %}
+{% load static %}
+
+{% block title %}Booking{% endblock %}
+
+{% block content %}
+    <div class="container mx-auto max-w-4xl p-6 overflow-y-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-4">
+            <h1 class="text-2xl font-bold">Booking</h1>
+            <a href="{% url 'book-list' %}" class="text-orange-500 border border-orange-500 px-4 py-1 rounded hover:bg-orange-500 hover:text-white">ย้อนกลับ</a>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="flex items-center mb-6">
+            <div class="w-14 h-8 bg-yellow-500 text-white rounded-full flex items-center justify-center">1</div>
+            <div class="w-full h-2 bg-gray-300"></div>
+            <div class="w-14 h-8 bg-gray-300 text-white rounded-full flex items-center justify-center">2</div>
+            <div class="w-full h-2 bg-gray-300"></div>
+            <div class="w-14 h-8 bg-gray-300 text-white rounded-full flex items-center justify-center">3</div>
+        </div>
+
+        <!-- List of Sports Facilities -->
+        <ul class="space-y-4">
+            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-second' %}';">
+                <span>สนามแบดมินตัน</span>
+                <span class="text-gray-500">&gt;</span>
+            </li>
+            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-second' %}';">
+                <span>สนามฟุตบอล</span>
+                <span class="text-gray-500">&gt;</span>
+            </li>
+        </ul>
+    </div>
+
+{% endblock %}

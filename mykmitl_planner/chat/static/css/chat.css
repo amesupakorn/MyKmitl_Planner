@@ -6,22 +6,19 @@
     --right-msg-bg: #ff7626;
   }
   
-
-  
   .msger {
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
     width: 100%;
     max-width: 98%;
-    height: calc(100% - 100px);
+    height: 90vh;  
     border: var(--border);
     border-radius: 5px;
     background: var(--msger-bg);
     box-shadow: 0 15px 15px -5px rgba(0, 0, 0, 0.2);
     margin: auto;
   }
-  
   
   .msger-chat {
     flex: 1;

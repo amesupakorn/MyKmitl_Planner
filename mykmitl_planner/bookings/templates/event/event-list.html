@@ -1,0 +1,97 @@
+{% extends "event/layoutRe.html" %}
+{% load static %}
+
+{% block title %}Recommend{% endblock %}
+
+{% block content %}
+  <div class="container overflow-y-auto mx-auto p-5">
+    <div class="flex items-center justify-between mb-5">
+
+      <h2 class="text-2xl font-bold">Recommend Places or Activities</h2>
+      <!-- create event -->
+      <a href="{% url 'create-event' %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Create Activities</a>
+
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      
+      <!-- Card 1 -->
+      <div class="bg-white rounded-lg overflow-hidden shadow-lg flex flex-col justify-between">
+        <img src="{% static 'images/register.webp' %}" alt="Image 1" class="w-[400px] h-[300px] object-cover">
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-semibold">The Catalyzer</h3>
+
+          <div class="flex flex-col items-start mb-2">
+            <p class="text-xs text-white bg-orange-400 rounded-lg px-2 py-1">01/09/2024 - 08/09/2024</p>
+          </div>
+
+          <p class="text-gray-700 text-base mb-4 flex-grow">ha leggings</p>
+          <a href="{% url 'event-detail' %}" class="text-orange-500 font-bold hover:underline mt-auto">Learn More →</a>
+        </div>
+      </div>
+      
+      <!-- Card 2 -->
+      <div class="bg-white rounded-lg overflow-hidden shadow-lg flex flex-col justify-between">
+        <img src="https://via.placeholder.com/400x300" alt="Image 2" class="w-[400px] h-[300px] object-cover">
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-semibold">The 400 Blows</h3>
+          
+          <div class="flex flex-col items-start mb-2">
+            <p class="text-xs text-white bg-orange-400 rounded-lg px-2 py-1">01/09/2024 - 08/09/2024</p>
+          </div>
+
+          <p class="text-gray-700 text-base mb-4 flex-grow">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
+          <a href="{% url 'event-detail' %}" class="text-orange-500 font-bold hover:underline mt-auto">Learn More →</a>
+        </div>
+      </div>
+      
+      <!-- Card 3 -->
+      <div class="bg-white rounded-lg overflow-hidden shadow-lg flex flex-col justify-between">
+        <img src="https://via.placeholder.com/400x300" alt="Image 3" class="w-[400px] h-[300px] object-cover">
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-semibold">Shooting Stars</h3>
+          
+          <div class="flex flex-col items-start mb-2">
+            <p class="text-xs text-white bg-orange-400 rounded-lg px-2 py-1">01/09/2024 - 08/09/2024</p>
+          </div>
+
+          <p class="text-gray-700 text-base mb-4 flex-grow">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
+          <a href="{% url 'event-detail' %}" class="text-orange-500 font-bold hover:underline mt-auto">Learn More →</a>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="bg-white rounded-lg overflow-hidden shadow-lg flex flex-col justify-between">
+        <img src="https://via.placeholder.com/400x300" alt="Image 2" class="w-[400px] h-[300px] object-cover">
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-semibold">The 400 Blows</h3>
+          
+          <div class="flex flex-col items-start mb-2">
+            <p class="text-xs text-white bg-orange-400 rounded-lg px-2 py-1">01/09/2024 - 08/09/2024</p>
+          </div>
+
+          <p class="text-gray-700 text-base mb-4 flex-grow">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
+          <a href="{% url 'event-detail' %}" class="text-orange-500 font-bold hover:underline mt-auto">Learn More →</a>
+        </div>
+      </div>
+      
+      <!-- Card 5 -->
+      <div class="bg-white rounded-lg overflow-hidden shadow-lg flex flex-col justify-between">
+        <img src="https://via.placeholder.com/400x300" alt="Image 3" class="w-[400px] h-[300px] object-cover">
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-semibold">Shooting Stars</h3>
+          
+          <div class="flex flex-col items-start mb-2">
+            <p class="text-xs text-white bg-orange-400 rounded-lg px-2 py-1">01/09/2024 - 08/09/2024</p>
+          </div>
+
+          <p class="text-gray-700 text-base mb-4 flex-grow">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
+          <a href="{% url 'event-detail' %}" class="text-orange-500 font-bold hover:underline mt-auto">Learn More →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  {% endblock %}
+
+</body>
+</html>

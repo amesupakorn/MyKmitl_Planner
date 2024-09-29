@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     'planner',
     'bookings',
     'chat',
-    'authen'
+    'authen',
 ]
 TAILWIND_APP_NAME = 'theme'
 SITE_ID = 1 
@@ -126,7 +126,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "mykmitl", 
         "USER":  "postgres",
-        "PASSWORD": "6743",
+        "PASSWORD": "password",
         "HOST": "localhost",
         "PORT": "8000",
     }

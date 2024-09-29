@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <section class="msger">
+    <section class="msger bg-white p-6 rounded-lg shadow-lg">
         <main class="msger-chat">
             <div class="msg left-msg">
 
@@ -39,15 +39,13 @@
             </div>
         </main>
 
-        <form class="msger-inputarea">            <!-- Input field -->
-            <input type="text" class="msger-input" placeholder="Enter your message...">
-            <button type="submit" class="msger-send-btn">Send</button>
+        <!-- Input field -->
+        <form class="msger-inputarea rounded-2xl">            
+            <input type="text" class="msger-input rounded-lg" placeholder="Enter your message...">
+            <button type="submit" class="msger-send-btn rounded-lg">Send</button>
         </form>
         
-        <!-- Font Awesome for the icon -->
-        
-        
-        
+
     </section>
 {% endblock %}
 

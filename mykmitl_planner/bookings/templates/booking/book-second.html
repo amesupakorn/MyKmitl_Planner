@@ -1,0 +1,66 @@
+{% extends "booking/layoutBo.html" %}
+{% load static %}
+
+{% block title %}Booking{% endblock %}
+
+{% block content %}
+    <div class="container mx-auto max-w-4xl p-6 overflow-y-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-4">
+            <h1 class="text-2xl font-bold">Booking</h1>
+            <a href="{% url 'book-first' %}" class="text-orange-500 border border-orange-500 px-4 py-1 rounded hover:bg-orange-500 hover:text-white">ย้อนกลับ</a>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="flex items-center mb-6">
+            <div class="w-14 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center">1</div>
+            <div class="w-full h-2 bg-yellow-500"></div>
+            <div class="w-14 h-8 bg-yellow-500 text-white rounded-full flex items-center justify-center">2</div>
+            <div class="w-full h-2 bg-gray-300"></div>
+            <div class="w-14 h-8 bg-gray-300 text-white rounded-full flex items-center justify-center">3</div>
+        </div>
+
+        <div class="bg-white p-4 shadow-md rounded-lg mb-4">
+            <div class="flex items-center space-x-2 mb-4">
+                <h4 class="font-bold text-gray-700">สถานที่จอง</h4>
+                <p class="text-gray-600 text-sm">สนามฟุตบอล</p>
+            </div>
+
+            <h4 class="font-bold text-gray-700 mb-2">สิ่งอำนวยความสะดวก</h4>
+            <ul class="text-gray-600 text-sm list-disc pl-4 mb-4">
+                <li>ระยะเวลาการจอง 1 ชม./ครั้ง</li>
+                <li>จองได้ 3 ครั้ง/วัน</li>
+            </ul>
+
+            <h4 class="font-bold text-gray-700 mb-2">รายละเอียด</h4>
+            <p class="text-gray-600 text-sm mb-4">
+                ข้อความร่วมมือ: อาหารและน้ำที่นำเข้ามานำกลับออกไปทิ้งให้เรียบร้อย<br>
+                เวลาทำการ: ทุกวัน 09:00 - 19:00 น.<br>
+                * ผู้ใช้จะต้องรับผิดชอบต่อความเสียหายที่เกิดขึ้นทุกกรณี *
+            </p>
+        </div>
+        <!-- Label and Input for Date Selection -->
+        <div class="mb-4">
+            <label for="start_date" class="block text-gray-700 font-bold mb-2">วันที่ต้องการจอง:</label>
+            <input type="date" id="start_date" name="start_date" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+
+        <hr>
+        <!-- Time Slots -->
+        <div class="grid grid-cols-2 gap-2 mt-4">
+            <button class="border border-orange-500 py-2 text-center rounded">09:00 - 10:00 </button>
+            <button class="border border-orange-500 py-2 text-center rounded">10:00 - 11:00 </button>
+            <button class="border border-orange-500 py-2 text-center rounded">11:00 - 12:00 </button>
+            <button class="bg-orange-500 text-white py-2 rounded hover:bg-orange-600">12:00 - 13:00 </button>
+            <button class="bg-orange-500 text-white py-2 rounded hover:bg-orange-600">13:00 - 14:00 </button>
+            <button class="bg-orange-500 text-white py-2 rounded hover:bg-orange-600">14:00 - 15:00 </button>
+            <button class="bg-orange-500 text-white py-2 rounded hover:bg-orange-600">15:00 - 16:00 </button>
+            <button class="bg-orange-500 text-white py-2 rounded hover:bg-orange-600">16:00 - 17:00 </button>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-6">
+            <a href="{% url 'book-third' %}" class="block w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 text-center">ไปต่อ</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "event/layoutRe.html" %}
+{% load static %}
+
+{% block title %}Event Details{% endblock %}
+
+{% block content %}
+<!-- Container -->
+<div class="max-width-full container overflow-y-auto p-5 relative">
+    <!-- Back Button (X icon) -->
+    <a href="{% url 'event-list' %}" class="absolute top-0 right-5 mt-4 ml-4 text-gray-500 hover:text-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </a>
+
+    <!-- Event Header -->
+    <h2 class="text-3xl font-bold mb-6 text-center">{{ event.name }}</h2>
+
+    <!-- Event Image -->
+    <div class="mb-6">
+        {% if event.event_image %}
+        <img src="{{ event.event_image.url }}" alt="{{ event.name }}" class="mx-auto w-[600px] h-auto object-cover rounded-lg shadow-lg">
+        {% else %}
+        <img src="{% static 'images/register.webp' %}" alt="{{ event.name }}" class="mx-auto w-[600px] h-auto object-cover rounded-lg shadow-lg">
+        {% endif %}
+    </div>
+
+    <!-- Event Details -->
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <!-- Event Name -->
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold">ชื่อกิจกรรม:</h3>
+            <p class="text-gray-700 text-base">ค่ายอบรมพัฒนาทักษะการเขียนโปรแกรม</p>
+            <!-- ตัวอย่าง: {{ event.name }} -->
+        </div>
+
+        <!-- Description -->
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold">รายละเอียดกิจกรรม:</h3>
+            <p class="text-gray-700 text-base">การอบรมเกี่ยวกับการเขียนโปรแกรมเบื้องต้นสำหรับผู้ที่ไม่มีพื้นฐาน</p>
+            <!-- ตัวอย่าง: {{ event.description }} -->
+        </div>
+
+        <!-- Start and End Date and Time in one row -->
+        <div class="flex space-x-4 mb-6">
+            <!-- Start Time -->
+            <div class="w-1/2">
+                <h3 class="text-lg font-semibold">เริ่มต้น:</h3>
+                <p class="text-gray-700 text-base">25/12/2024 09:00</p>
+                <!-- ตัวอย่าง: {{ event.start_time|date:"d/m/Y H:i" }} -->
+            </div>
+            <!-- End Time -->
+            <div class="w-1/2">
+                <h3 class="text-lg font-semibold">สิ้นสุด:</h3>
+                <p class="text-gray-700 text-base">25/12/2024 16:00</p>
+                <!-- ตัวอย่าง: {{ event.end_time|date:"d/m/Y H:i" }} -->
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold">สถานที่:</h3>
+            <p class="text-gray-700 text-base">อาคารเรียนรวม ห้อง 101 มหาวิทยาลัย ABC</p>
+            <!-- ตัวอย่าง: {{ event.location }} -->
+        </div>
+
+        <!-- Status and Participants in one row -->
+        <div class="flex space-x-4 mb-6">
+            <!-- Status -->
+            <div class="w-1/2">
+                <h3 class="text-lg font-semibold">สถานะ:</h3>
+                <p class="text-gray-700 text-base">กำลังจะมาถึง</p>
+                <!-- ตัวอย่าง:  {{ event.get_status_display }} -->
+            </div>
+            <!-- Participants -->
+            <div class="w-1/2">
+                <h3 class="text-lg font-semibold">จำนวนผู้เข้าร่วม (สูงสุด):</h3>
+                <p class="text-gray-700 text-base">100 คน</p>
+                <!-- ตัวอย่าง: {{ event.participants }} -->
+            </div>
+        </div>
+
+        <!-- Edit Button -->
+        <div class="flex justify-end mt-6">
+            <a href="{% url 'edit-event' %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200 ease-in-out">
+                Edit Activities
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
