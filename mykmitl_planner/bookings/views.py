@@ -34,25 +34,35 @@ class EditEventPage(View):
 
 # Booking
 class BookingListPage(View):
-    
     def get(self, request):
-        return render(request, "booking/book-list.html",{
+        facility = Facility.objects.filter(booking_status='available').values('location').distinct()
 
+        return render(request, "booking/book-list.html",{
+            'locations' : facility 
         })
     
 class BookFirstPage(View):
     
-    def get(self, request):
+    def get(self, request, location):
+        facilities = Facility.objects.filter(location=location)
         return render(request, "booking/book-first.html",{
-
+            'facility' : facilities
         })
 
 class BookSecondPage(View):
     
-    def get(self, request):
+    def get(self, request, id):
+        facilities = Facility.objects.get(id=id)
         return render(request, "booking/book-second.html",{
-
+            'facilities' : facilities
         })
+
+class CheckAvailableTimes(View):
+
+    def get(self, request, facility_id):
+
+        return
+    
     
 class BookThirdPage(View):
     

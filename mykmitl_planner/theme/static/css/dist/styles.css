@@ -1028,6 +1028,10 @@ select {
   margin-top: 12rem;
 }
 
+.ml-auto {
+  margin-left: auto;
+}
+
 .block {
   display: block;
 }
