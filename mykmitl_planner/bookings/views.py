@@ -7,7 +7,7 @@ class EventListPage(View):
     
     def get(self, request):
         return render(request, "event/event-list.html",{
-
+            
         })
     
 class EventDetailPage(View):
@@ -36,8 +36,10 @@ class EditEventPage(View):
 class BookingListPage(View):
     
     def get(self, request):
+        facility = Facility.objects.filter(booking_status='available').values('location').distinct()
+        
         return render(request, "booking/book-list.html",{
-
+            'location' : facility,
         })
     
 class BookFirstPage(View):

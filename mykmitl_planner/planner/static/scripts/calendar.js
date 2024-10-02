@@ -68,11 +68,13 @@ $(document).ready(function() {
                 csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
             };
 
-            let url = $('#add-event').attr('action');
+             // เลือก method PUT หรือ POST ขึ้นอยู่กับว่ามี event_id หรือไม่
+            let method = eventData.event_id ? 'PUT' : 'POST';
+            let url = $('#add-event').attr('action'); // URL สำหรับ POST/PUT request
 
-            // ส่งข้อมูลไปยัง server ผ่าน Fetch API
+            // ใช้ Fetch API ในการส่งข้อมูลไปยัง server
             fetch(url, {
-                method: 'POST',  // ใช้ POST method
+                method: method,  // ใช้ POST หรือ PUT method
                 headers: {
                     'Content-Type': 'application/json',  // ส่งข้อมูลเป็น JSON
                     'X-CSRFToken': eventData.csrfmiddlewaretoken  // ส่ง CSRF token เพื่อป้องกัน CSRF attacks
@@ -98,7 +100,7 @@ $(document).ready(function() {
                 alert('There was an error saving the event. Please try again.');
             });
         });
-        
+                
       // Delete Event (เพิ่มโค้ดสำหรับการลบที่นี่)
       $('#delete-btn').on('click', function() {
         if (selectedEvent) {

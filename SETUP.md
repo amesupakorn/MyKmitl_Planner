@@ -17,6 +17,7 @@ python3 -m venv myvenv
 source myvenv/bin/activate
 
 pip install django
+pip install django psycopg2 
 
 # Create project "myblogs"
 django-admin startproject myblogs
@@ -24,12 +25,6 @@ django-admin startproject myblogs
 # Create the "blogs" app
 python manage.py startapp blogs
 ```
-
-> ติดตั้ง Potgres Client `psycopg2` ติดตั้ง `django-extensions` และ `jupyter notebook` ด้วยคำสั่ง
-> 
-
-
-
 > makemigrations เพื่อให้ Django ทำการสร้างไฟล์ migration ขึ้นมา
 > 
 
