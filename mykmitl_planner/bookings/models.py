@@ -10,7 +10,6 @@ class Booking(models.Model):
     ]
     facility = models.ForeignKey(Facility, on_delete=models.CASCADE)
     student = models.ForeignKey('planner.Student', on_delete=models.CASCADE)
-    description = models.CharField(max_length=200)
     checkin_date = models.DateField()
     checkin_time = models.TimeField()
     checkout_time = models.TimeField()
