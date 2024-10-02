@@ -103,17 +103,6 @@ class BookThirdPage(View):
                 time_start = time.strftime('%H:%M')
                 time_end = time_end.strftime('%H:%M')
 
-                # ใช้ transaction.atomic() เพื่อห่อการทำงานกับฐานข้อมูล
-                with transaction.atomic():
-                    booking = Booking.objects.create(
-                        facility=facilities,
-                        student=Student.objects.get(student_user=request.user),
-                        checkin_date=date,
-                        checkin_time=time_start,
-                        checkout_time=time_end,
-                        booking_status='upcoming'
-                    )
-
                 # ถ้าทำการจองสำเร็จ, แสดงผลในหน้า booking success
                 return render(request, "booking/book-third.html", {
                     'facilities': facilities,
@@ -134,7 +123,7 @@ class BookThirdPage(View):
 class BookConfirm(View):
     def post(self, request, id):
         try:
-            
+
             facilities = Facility.objects.get(id=id)
             student = Student.objects.get(student_user=request.user)
 
@@ -154,9 +143,7 @@ class BookConfirm(View):
                 )
                 
                 messages.success(request, "Confirm your Booking")
-                return render(request, "booking/upcoming.html", {
-                    'booking': booking,
-                })
+                return redirect('upcoming')
         except Exception as e:
             # จัดการข้อผิดพลาดทั่วไป
             messages.error(request, f"An error occurred: {str(e)}")
@@ -209,8 +196,9 @@ class BookDetailPage(View):
 class StaffBookPage(View):
     
     def get(self, request):
+        booking = Booking.objects.all().order_by('-checkin_date')
         return render(request, "booking/staff/book-staff.html",{
-
+            'booking' : booking
         })
     
 class FacilitiesPage(View):

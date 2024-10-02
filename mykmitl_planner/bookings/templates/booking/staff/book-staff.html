@@ -29,57 +29,39 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer Name</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Facilities</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Booking</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Start Time</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">End Time</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Duration</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                     </tr>
                 </thead>
                 <tbody id="bookingTable" class="bg-white divide-y divide-gray-200">
-                    <!-- Booking Row 1 -->
-                    <tr data-status="upcoming">
-                        <td class="px-6 py-4 whitespace-nowrap">001</td>
-                        <td class="px-6 py-4 whitespace-nowrap">John Doe</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Sport Center</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Football Field</td>
-                        <td class="px-6 py-4 whitespace-nowrap">28 Sept 2024, 10:00 AM</td>
-                        <td class="px-6 py-4 whitespace-nowrap">28 Sept 2024, 11:00 AM</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                Upcoming
-                            </span>
-                        </td>
-                    </tr>
 
-                    <!-- Booking Row 2 -->
-                    <tr data-status="past">
-                        <td class="px-6 py-4 whitespace-nowrap">002</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Jane Smith</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Sport Center</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Football Field</td>
-                        <td class="px-6 py-4 whitespace-nowrap">27 Sept 2024, 11:00 AM</td>
-                        <td class="px-6 py-4 whitespace-nowrap">27 Sept 2024, 12:00 PM</td>
+                    {% for b in booking %}
+                    <tr data-status="{{ b.booking_status }}">
+                        <td class="px-6 py-4 whitespace-nowrap">{{ b.id }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ b.student.student_user.username }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ b.facility.name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ b.facility.location }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ b.checkin_date|date:"d M Y" }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ b.checkin_time | date:"H:i"}} - {{ b.checkout_time | date:"H:i"}}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Past Booking
-                            </span>
+                            {% if b.booking_status == 'upcoming' %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                    Upcoming
+                                </span>
+                            {% elif b.booking_status == 'past' %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Past Booking
+                                </span>
+                            {% elif b.booking_status == 'cancelled' %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    Cancelled
+                                </span>
+                            {% endif %}
                         </td>
                     </tr>
-
-                    <!-- Booking Row 3 -->
-                    <tr data-status="cancelled">
-                        <td class="px-6 py-4 whitespace-nowrap">003</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Michael Johnson</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Sport Center</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Football Field</td>
-                        <td class="px-6 py-4 whitespace-nowrap">26 Sept 2024, 14:00 PM</td>
-                        <td class="px-6 py-4 whitespace-nowrap">26 Sept 2024, 15:00 PM</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                Cancelled
-                            </span>
-                        </td>
-                    </tr>
+                    {% endfor %}
                     
                 </tbody>
             </table>

@@ -27,7 +27,7 @@
                         <div>
                             <h3 class="text-gray-700 font-bold">{{ b.facility.name }}</h3>
                             <p class="text-sm text-gray-500">
-                                {{ b.checkin_date|date:"d M Y" }}, {{ b.checkin_time }} - {{ b.checkout_time }}
+                                {{ b.checkin_date|date:"d M Y" }}, {{ b.checkin_time | date:"H:i"}} - {{ b.checkout_time | date:"H:i"}}
                             </p>
                         </div>
                         <div class="ml-auto flex space-x-2">
