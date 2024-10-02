@@ -51,7 +51,7 @@ class Facility(models.Model):
 class Event(models.Model):
     staff = models.ForeignKey('planner.UniversityStaff', on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    description = models.CharField(max_length=50)
+    description = models.CharField(max_length=500)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     status = models.CharField(max_length=20)
