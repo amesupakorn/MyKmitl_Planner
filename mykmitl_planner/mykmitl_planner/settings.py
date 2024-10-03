@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django.contrib.humanize",
-    
+    'rest_framework',
 
      # แอปของ allauth
     'allauth',
@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'django_browser_reload',
-    
     'widget_tweaks',
     
     'planner',

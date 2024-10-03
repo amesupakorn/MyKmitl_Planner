@@ -8,50 +8,30 @@
 {% endblock %}
 
 {% block content %}
+    {% csrf_token %}
     <section class="msger bg-white p-6 rounded-lg shadow-lg">
         <main class="msger-chat">
-            <div class="msg left-msg">
-
-            <div class="msg-bubble">
-                <div class="msg-info">
-                <div class="msg-info-name">BOT</div>
-                <div class="msg-info-time"></div>
-                </div>
-
-                <div class="msg-text">
-                Hi, welcome to SimpleChat! Go ahead and send me a message.
-                </div>
-            </div>
-            </div>
-
-            <div class="msg right-msg">
-
-            <div class="msg-bubble">
-                <div class="msg-info">
-                <div class="msg-info-name">Sajad</div>
-                <div class="msg-info-time">12:46</div>
-                </div>
-
-                <div class="msg-text">
-                You can change your name in JS section!
-                </div>
-            </div>
-            </div>
+     
+          
         </main>
-
         <!-- Input field -->
-        <form class="msger-inputarea rounded-2xl">            
-            <input type="text" class="msger-input rounded-lg" placeholder="Enter your message...">
-            <button type="submit" class="msger-send-btn rounded-lg">Send</button>
-        </form>
+        <div class="msger-inputarea rounded-2xl">            
+            <input type="text" id="message-input" class="msger-input rounded-lg" placeholder="Enter your message...">
+            <button type="button" id="send-button" class="msger-send-btn rounded-lg">Send</button>
+        </div>
         
 
     </section>
 {% endblock %}
 
 {% block script %}
-  <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
-  <script src="{% static 'scripts/chat.js' %}"></script>
+    <script> 
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const userRole = "{{ user_role|escapejs }}";  // ส่งค่า user_role มายังตัวแปร JavaScript
+        const username = "{{ sender|escapejs }}"
+    </script>
+    <script src="{% static 'scripts/chat.js' %}"></script>
+    <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
   
 {% endblock %}
 </body>

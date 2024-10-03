@@ -92,6 +92,11 @@
                         </button>
 
                     {% endif %}
+                    {% if user.student.profile_picture %}
+                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ user.student.profile_picture.url }}" alt="Profile Picture">
+                    {% else %}
+                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
+                    {% endif %}
                     <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
 
                     <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
@@ -162,6 +167,17 @@
         
 
     {% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const messageBox = document.getElementById('message-box');
+                if (messageBox) {
+                    messageBox.style.opacity = '0';
+                    setTimeout(() => { messageBox.style.display = 'none'; }, 1000); // Hide after fade out
+                }
+            }, 3000); // 5 วินาที
+        });
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- AlpineJS -->
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>

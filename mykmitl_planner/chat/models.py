@@ -12,6 +12,7 @@ class Message(models.Model):
     content = models.CharField(max_length=200)
     timestamp = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='sent')
-
+    sender = models.CharField(max_length=20)
+    
     def __str__(self):
         return f"Message from {self.student} to {self.staff}"
