@@ -42,7 +42,13 @@ class EditEventPage(View):
 # Booking
 class BookingListPage(View):
     def get(self, request):
+        bookings = Booking.objects.all()
+        # อัปเดตสถานะการจองทั้งหมด
+        for booking in bookings:
+            booking.update_status()
+
         facility = Facility.objects.filter(booking_status='available').values('location').distinct()
+        
 
         return render(request, "booking/book-list.html",{
             'locations' : facility 
