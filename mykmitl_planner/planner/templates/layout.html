@@ -73,8 +73,8 @@
                             <a>admin</a>
                         </button>
                     {% endif %}
-                    {% if student.profile_picture %}
-                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ student.profile_picture.url }}" alt="Profile Picture">
+                    {% if user.student.profile_picture %}
+                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ user.student.profile_picture.url }}" alt="Profile Picture">
                     {% else %}
                             <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
                     {% endif %}

@@ -25,7 +25,11 @@
     {% tailwind_css %}
     
 </head>
+<<<<<<< HEAD
 <body class="bg-gray-50 font-family-karla flex">
+=======
+<body class="bg-gray-100 font-family-karla flex overflow-y-auto">
+>>>>>>> origin/draft
 
         <!-- Header -->
         {% block sidebar %}
@@ -78,6 +82,11 @@
                     {% else %}
                             <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
                     {% endif %}
+                    {% if user.student.profile_picture %}
+                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ user.student.profile_picture.url }}" alt="Profile Picture">
+                    {% else %}
+                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
+                    {% endif %}
                     <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
 
                     <div x-show="isOpen" class="account absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-14 mr-8" style="z-index: 9999;">
@@ -108,7 +117,7 @@
                         <i class="fas fa-map-marker-alt mr-3"></i>
                         Booking
                     </a>
-                    <a href="{% url 'chat-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <a href="{% url 'chat-help' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-comments mr-3"></i>
                         Chat
                     </a>
@@ -138,6 +147,10 @@
                 {% endif %}
             </div>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/draft
         {% endblock %}
 
         {% block content %}
@@ -150,6 +163,17 @@
         
 
     {% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const messageBox = document.getElementById('message-box');
+                if (messageBox) {
+                    messageBox.style.opacity = '0';
+                    setTimeout(() => { messageBox.style.display = 'none'; }, 1000); // Hide after fade out
+                }
+            }, 3000); // 5 วินาที
+        });
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- AlpineJS -->
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>

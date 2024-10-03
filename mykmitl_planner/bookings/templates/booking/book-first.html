@@ -22,14 +22,12 @@
 
         <!-- List of Sports Facilities -->
         <ul class="space-y-4">
-            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-second' %}';">
-                <span>สนามแบดมินตัน</span>
+            {% for facilities in facility %}
+            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-second' facilities.id %}';">
+                <span>{{facilities.name}}</span>
                 <span class="text-gray-500">&gt;</span>
             </li>
-            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-second' %}';">
-                <span>สนามฟุตบอล</span>
-                <span class="text-gray-500">&gt;</span>
-            </li>
+            {% endfor %}
         </ul>
     </div>
 

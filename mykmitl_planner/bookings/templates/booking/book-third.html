@@ -8,7 +8,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between mb-4">
             <h1 class="text-2xl font-bold">Booking</h1>
-            <a href="{% url 'book-second' %}" class="text-orange-500 border border-orange-500 px-4 py-1 rounded hover:bg-orange-500 hover:text-white">ย้อนกลับ</a>
+            <a href="{% url 'book-second' facilities.id %}" class="text-orange-500 border border-orange-500 px-4 py-1 rounded hover:bg-orange-500 hover:text-white">ย้อนกลับ</a>
         </div>
 
         <!-- Progress Indicator -->
@@ -27,11 +27,11 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <h3 class="text-orange-500 font-bold mb-2">Facilities</h3>
-                    <p>สนามกีฬา</p>
+                    <p>{{ facilities.name }}</p>
                 </div>
                 <div>
-                    <h3 class="text-gray-700 font-bold mb-2">Booking</h3>
-                    <p>สนามฟุตบอล</p>
+                    <h3 class="text-gray-700 font-bold mb-2">Location</h3>
+                    <p>{{ facilities.location }}</p>
                 </div>
             </div>
 
@@ -39,11 +39,11 @@
             <div class="grid grid-cols-2 gap-4 mt-4 mb-4">
                 <div>
                     <h3 class="text-orange-500 font-bold mb-2">เริ่มต้น</h3>
-                    <p>28 ก.ย. 2567 10:00:00</p>
+                    <p>{{ date|date:"d M. Y" }}, เวลา {{ time_start }} น.</p>
                 </div>
                 <div>
                     <h3 class="text-gray-700 font-bold mb-2">สิ้นสุด</h3>
-                    <p>28 ก.ย. 2567 11:00:00</p>
+                    <p>{{ date|date:"d M. Y" }}, เวลา {{ time_end }} น</p>
                 </div>
             </div>
             <hr class="mb-4">
@@ -51,16 +51,26 @@
             <!-- Name book -->
             <div class="flex items-center space-x-2 mb-4">
                 <h4 class="font-bold text-gray-700">ชื่อผู้จอง</h4>
-                <p class="text-gray-600 text-xm">supakorn</p>
+                <p class="text-gray-600 text-xm">{{ user.username }}</p>
             </div>
 
             
         </div>
 
-        <!-- Submit Button -->
-        <div class="mt-6 flex space-x-2">
-            <a href="{% url 'book-list' %}" class="w-1/2 bg-red-500 text-white py-3 rounded text-center hover:bg-red-600">Cancel Booking</a>
-            <a href="{% url 'upcoming' %}" class="w-1/2 bg-green-500 text-white py-3 rounded text-center hover:bg-green-600">Confirm Booking</a>
-        </div>
+        <form action="{% url 'book-confirm' facilities.id %}" method="POST">
+            {% csrf_token %}
+        
+            <!-- Hidden Inputs เพื่อส่งข้อมูลทั้งหมด -->
+           
+            <input type="hidden" name="date" value="{{ date }}">
+            <input type="hidden" name="start_time" value="{{ time_start }}">
+            <input type="hidden" name="end_time" value="{{ time_end }}">
+
+            <!-- Submit Button -->
+            <div class="mt-6 flex space-x-2">
+                <a href="{% url 'book-list' %}" class="w-1/2 bg-red-500 text-white py-3 rounded text-center hover:bg-red-600">Cancel Booking</a>
+                <button type="submit" class="w-1/2 bg-green-500 text-white py-3 rounded text-center hover:bg-green-600">Confirm Booking</button>
+            </div>
+        </form>
     </div>
     {% endblock %}

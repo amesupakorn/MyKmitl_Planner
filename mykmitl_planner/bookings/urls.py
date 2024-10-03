@@ -8,12 +8,15 @@ urlpatterns = [
     path('edit-event/', views.EditEventPage.as_view(), name='edit-event'),
 
     path("", views.BookingListPage.as_view(), name="book-list"),
-    path("book-first/", views.BookFirstPage.as_view(), name="book-first"),
-    path('book-second/', views.BookSecondPage.as_view(), name='book-second'),
-    path('book-third/', views.BookThirdPage.as_view(), name='book-third'),
-    path("upcoming/", views.UpcomingBookPage.as_view(), name="upcoming"),
+    path("book-first/<str:location>", views.BookFirstPage.as_view(), name="book-first"),
+    path('book-second/<int:id>', views.BookSecondPage.as_view(), name='book-second'),
+    path('book-second/check-available-times/', views.CheckAvailableTimes.as_view(), name='check-available-times'),
+    path('book-third/<int:id>', views.BookThirdPage.as_view(), name='book-third'),
+    path('book-confirm/<int:id>', views.BookConfirm.as_view(), name='book-confirm'),
+
+    path('upcoming/', views.UpcomingBookPage.as_view(), name='upcoming'),
     path('past-book/', views.PastBookPage.as_view(), name='past-book'),
-    path('book-detail/', views.BookDetailPage.as_view(), name='book-detail'),
+    path('book-detail/<int:id>', views.BookDetailPage.as_view(), name='book-detail'),
     path('book-staff/', views.StaffBookPage.as_view(), name='book-staff'),
 
     path('facilities/', views.FacilitiesPage.as_view(), name='facilities'),

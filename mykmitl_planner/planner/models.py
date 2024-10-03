@@ -40,7 +40,11 @@ class Facility(models.Model):
         ('available', 'Available'),
         ('unavailable', 'Unavailable'),
     ]
+<<<<<<< HEAD
      
+=======
+
+>>>>>>> origin/draft
     staff = models.ForeignKey('planner.UniversityStaff', on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
@@ -49,8 +53,13 @@ class Facility(models.Model):
     location = models.CharField(max_length=100)
     status = models.CharField(max_length=20)
     capacity = models.IntegerField()
+<<<<<<< HEAD
     booking_status = models.CharField(max_length=20, choices=BOOKING_CHOICES, default='available') 
 
+=======
+    booking_status = models.CharField(max_length=20, choices=BOOKING_CHOICES, default='available')
+    
+>>>>>>> origin/draft
     def __str__(self):
         return self.name
 

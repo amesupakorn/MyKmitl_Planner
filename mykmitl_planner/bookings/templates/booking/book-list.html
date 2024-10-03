@@ -14,30 +14,12 @@
         <!-- List of Services -->
         
         <ul class="space-y-4">
-            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
-                <span>KMITL Lifelong Learning Center</span>
+            {% for location in locations %}
+            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' location.location %}';">
+                <span>{{location.location}}</span>
                 <span class="text-gray-500">&gt;</span>
             </li>
-            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
-                <span>KMITL Sport Center</span>
-                <span class="text-gray-500">&gt;</span>
-            </li>
-            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
-                <span>School of Information Technology KMITL</span>
-                <span class="text-gray-500">&gt;</span>
-            </li>
-            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
-                <span>School of Science</span>
-                <span class="text-gray-500">&gt;</span>
-            </li>
-            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
-                <span>KMITL School of Architecture</span>
-                <span class="text-gray-500">&gt;</span>
-            </li>
-            <li class="bg-white p-4 shadow rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-100" onclick="window.location.href='{% url 'book-first' %}';">
-                <span>Faculty of Engineering</span>
-                <span class="text-gray-500">&gt;</span>
-            </li>
+            {% endfor %}
         </ul>
     </div>
 
