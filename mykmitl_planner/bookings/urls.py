@@ -4,8 +4,8 @@ from . import views
 urlpatterns = [
     path("event-list/", views.EventListPage.as_view(), name="event-list"),
     path("create-event/", views.CreateEventPage.as_view(), name="create-event"),
-    path('event/', views.EventDetailPage.as_view(), name='event-detail'),
-    path('edit-event/', views.EditEventPage.as_view(), name='edit-event'),
+    path('event/<int:id>', views.EventDetailPage.as_view(), name='event-detail'),
+    path('edit-event/<int:id>', views.EditEventPage.as_view(), name='edit-event'),
 
     path("", views.BookingListPage.as_view(), name="book-list"),
     path("book-first/<str:location>", views.BookFirstPage.as_view(), name="book-first"),

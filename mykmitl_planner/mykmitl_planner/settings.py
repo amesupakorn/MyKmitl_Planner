@@ -182,6 +182,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ตั้งค่า authentication backends สำหรับ allauth
 AUTHENTICATION_BACKENDS = (
+    
     'django.contrib.auth.backends.ModelBackend',  # การยืนยันตัวตนแบบปกติ
     'allauth.account.auth_backends.AuthenticationBackend',  # สำหรับ allauth
 )

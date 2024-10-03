@@ -8,34 +8,91 @@ from django.contrib import messages
 from datetime import datetime, timedelta
 from django.db import transaction
 import json
+from .forms import *
 
 # Event
 class EventListPage(View):
-    
-    def get(self, request):
-        return render(request, "event/event-list.html",{
 
+    def get(self, request):
+        event = Event.objects.all()
+        return render(request, "event/event-list.html",{
+            'event' : event
         })
     
 class EventDetailPage(View):
     
-    def get(self, request):
+    def get(self, request, id):
+        event = Event.objects.get(id=id)
         return render(request, "event/event-detail.html",{
-
+            'event' : event
         })
     
+    def delete(self, request, id):
+        try:
+            body = json.loads(request.body)
+            event_id = body.get('event_id')
+            event = Event.objects.get(id=event_id)
+
+            with transaction.atomic(): 
+                event.facility.clear()
+                event.delete()
+                messages.success(request, "Delete event successfully")
+                return JsonResponse({'message': 'Delete event successfully.'}, status=200)
+  
+            
+        except Exception as e:
+            # จัดการข้อผิดพลาดทั่วไป
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect('event-detail')  
+    
+
 class CreateEventPage(View):
     
     def get(self, request):
-        return render(request, "event/staff/create-event.html",{
+        form = CreateEventForm()
+        return render(request, "event/staff/create-event.html", {
+            'form': form
+        })
+    
+    def post(self, request):
+        form = CreateEventForm(request.POST)
+        try:
+            with transaction.atomic(): 
 
+                if form.is_valid():
+                    event = form.save(commit=False)
+                    staff_member = UniversityStaff.objects.get(staff_user=request.user)
+
+                    event.staff = staff_member
+                    event.save()
+                    form.save_m2m() 
+                    
+                    messages.success(request, "Event created successfully")
+                    return redirect('event-list')
+
+        except Exception as e:
+            # จัดการข้อผิดพลาดทั่วไป
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect('event-list') 
+        
+class EditEventPage(View):
+    def get(self, request, id):
+        event = Event.objects.get(id=id)
+        form = CreateEventForm(instance=event)
+        return render(request, 'event/staff/edit-event.html', {
+            'event': event,
+            'form' : form
         })
 
-class EditEventPage(View):
-    
-    def get(self, request):
-        return render(request, "event/staff/edit-event.html",{
-
+    def post(self, request, id):
+        event = Event.objects.get(id=id)
+        form = CreateEventForm(request.POST, request.FILES, instance=event)
+        if form.is_valid():
+            form.save()
+            return redirect('event-detail', id=event.id)
+        
+        return render(request, 'event/staff/edit-event.html', {
+            'event': event
         })
     
 
@@ -48,7 +105,6 @@ class BookingListPage(View):
             booking.update_status()
 
         facility = Facility.objects.filter(booking_status='available').values('location').distinct()
-        
 
         return render(request, "booking/book-list.html",{
             'locations' : facility 
@@ -90,7 +146,6 @@ class CheckAvailableTimes(View):
             return JsonResponse(times, safe=False)
         
         return JsonResponse([], safe=False)
-
     
 class BookThirdPage(View):
     
@@ -155,7 +210,6 @@ class BookConfirm(View):
             messages.error(request, f"An error occurred: {str(e)}")
             return redirect('book-third', id=id)    
 
-
 class UpcomingBookPage(View):
     
     def get(self, request):
@@ -170,6 +224,7 @@ class UpcomingBookPage(View):
             body = json.loads(request.body)
             booking_id = body.get('booking_id')
             booking = Booking.objects.get(id=booking_id)
+
             with transaction.atomic(): 
                 if booking.booking_status != 'cancelled':
                     booking.booking_status = 'cancelled'
@@ -177,6 +232,7 @@ class UpcomingBookPage(View):
                     
                     messages.success(request, "Booking cancelled successfully")
                     return JsonResponse({'message': 'Booking cancelled successfully.'}, status=200)
+                
         except Exception as e:
             # จัดการข้อผิดพลาดทั่วไป
             messages.error(request, f"An error occurred: {str(e)}")
@@ -207,6 +263,7 @@ class StaffBookPage(View):
             'booking' : booking
         })
     
+# Facility
 class FacilitiesPage(View):
     
     def get(self, request):

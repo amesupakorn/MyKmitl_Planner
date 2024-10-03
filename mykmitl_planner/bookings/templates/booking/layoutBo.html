@@ -77,7 +77,7 @@
                             <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ user.student.profile_picture.url }}" alt="Profile Picture">
                     {% else %}
                             <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
-                    {% endif %}
+                    {% endif %} 
                     <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
 
                     <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
