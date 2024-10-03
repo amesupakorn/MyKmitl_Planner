@@ -25,11 +25,7 @@
     {% tailwind_css %}
     
 </head>
-<<<<<<< HEAD
 <body class="bg-gray-50 font-family-karla flex">
-=======
-<body class="bg-gray-100 font-family-karla flex overflow-y-auto">
->>>>>>> origin/draft
 
         <!-- Header -->
         {% block sidebar %}
@@ -82,11 +78,7 @@
                     {% else %}
                             <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
                     {% endif %}
-                    {% if user.student.profile_picture %}
-                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ user.student.profile_picture.url }}" alt="Profile Picture">
-                    {% else %}
-                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
-                    {% endif %}
+                
                     <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
 
                     <div x-show="isOpen" class="account absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-14 mr-8" style="z-index: 9999;">
@@ -147,10 +139,6 @@
                 {% endif %}
             </div>
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/draft
         {% endblock %}
 
         {% block content %}

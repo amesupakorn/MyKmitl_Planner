@@ -43,15 +43,9 @@ class EditEventPage(View):
 class BookingListPage(View):
     def get(self, request):
         facility = Facility.objects.filter(booking_status='available').values('location').distinct()
-<<<<<<< HEAD
-        
-        return render(request, "booking/book-list.html",{
-            'location' : facility,
-=======
 
         return render(request, "booking/book-list.html",{
             'locations' : facility 
->>>>>>> origin/draft
         })
     
 class BookFirstPage(View):

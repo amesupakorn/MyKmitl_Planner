@@ -67,7 +67,10 @@ pip install cryptography
 
 pip install fido2
 
+pip install djangorestframework
+
 python3 manage.py tailwind init
 
 python3 -m pip install Pillow
+
 ```
