@@ -36,14 +36,20 @@ class UniversityStaff(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 class Facility(models.Model):
+    BOOKING_CHOICES = [
+        ('available', 'Available'),
+        ('unavailable', 'Unavailable'),
+    ]
+     
     staff = models.ForeignKey('planner.UniversityStaff', on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=200)
+    description = models.CharField(max_length=500)
     opening = models.TimeField()
     closing = models.TimeField()
     location = models.CharField(max_length=100)
     status = models.CharField(max_length=20)
     capacity = models.IntegerField()
+    booking_status = models.CharField(max_length=20, choices=BOOKING_CHOICES, default='available') 
 
     def __str__(self):
         return self.name
@@ -51,7 +57,7 @@ class Facility(models.Model):
 class Event(models.Model):
     staff = models.ForeignKey('planner.UniversityStaff', on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    description = models.CharField(max_length=50)
+    description = models.CharField(max_length=500)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     status = models.CharField(max_length=20)

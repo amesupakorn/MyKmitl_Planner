@@ -110,27 +110,27 @@ WSGI_APPLICATION = 'mykmitl_planner.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#        "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "mykmitl", 
-#         "USER":  "postgres",
-#         "PASSWORD": "6743",
-#         "HOST": "localhost",
-#         "PORT": "8000",
-#     }
-# }
-
 DATABASES = {
        "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "mykmitl", 
         "USER":  "postgres",
-        "PASSWORD": "password",
+        "PASSWORD": "6743",
         "HOST": "localhost",
         "PORT": "8000",
     }
 }
+
+# DATABASES = {
+#        "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "mykmitl", 
+#         "USER":  "postgres",
+#         "PASSWORD": "password",
+#         "HOST": "localhost",
+#         "PORT": "8000",
+#     }
+# }
 
 
 # Password validation

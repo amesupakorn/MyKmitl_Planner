@@ -35,72 +35,104 @@ class CalendarPage(View):
         
         
     def post(self, request):
-        
         try:
             student = Student.objects.get(student_user=request.user)
+            data = json.loads(request.body)
+            location_id = data.get('location')
+            activity_id = data.get('activity')
+            location = None
+            activity = None
+            
+            if location_id:
+                try:
+                    location = Facility.objects.get(pk=location_id)
+                except Facility.DoesNotExist:
+                    return JsonResponse({'status': 'error', 'message': 'Facility not found'}, status=404)
+            
+            if activity_id:
+                try:
+                    activity = Event.objects.get(pk=activity_id)
+                except Event.DoesNotExist:
+                    return JsonResponse({'status': 'error', 'message': 'Event not found'}, status=404)
+            
+            # สร้างกิจกรรมใหม่
+            schedule = Schedule(student=student)
+            
+            form = CalendarForm(data, instance=schedule)
+            if form.is_valid():
+                schedule = form.save(commit=False)
+                if location:
+                    schedule.facility = location
+                if activity:
+                    schedule.event = activity
+                schedule.save()
+                
+                return JsonResponse({
+                    'status': 'success',
+                    'event_id': schedule.id,
+                    'message': 'Event created successfully!'
+                })
+            else:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Invalid form data',
+                    'errors': form.errors
+                }, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON data'}, status=400)
 
-            # อ่านข้อมูล JSON จาก request.body
+    def put(self, request):
+        try:
+            student = Student.objects.get(student_user=request.user)
             data = json.loads(request.body)
             event_id = data.get('event_id')
-            location_id = data.get('location') 
+            location_id = data.get('location')
             activity_id = data.get('activity')
-            location = None 
+            location = None
             activity = None
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'error','message': 'Invalid JSON data'
-            }, status=400)
-                    
-        if event_id:
+
+            if not event_id:
+                return JsonResponse({'status': 'error', 'message': 'Event ID is required for update'}, status=400)
+
             try:
                 schedule = Schedule.objects.get(id=event_id, student=student)
             except Schedule.DoesNotExist:
-                return JsonResponse({'status': 'error','message': 'Event not found'
-                }, status=404)
-        else:
-            # ถ้าไม่มี event_id แสดงว่าสร้างกิจกรรมใหม่
-            schedule = Schedule()
-
-        if location_id:
-            try:
-                location = Facility.objects.get(pk=location_id)
-            except Facility.DoesNotExist:
-                return JsonResponse({'status': 'error', 'message': 'Facility not found'}, status=404)
-
-        if activity_id:
-            try:
-                activity = Event.objects.get(pk=activity_id)
-            except Event.DoesNotExist:
                 return JsonResponse({'status': 'error', 'message': 'Event not found'}, status=404)
+
+            if location_id:
+                try:
+                    location = Facility.objects.get(pk=location_id)
+                except Facility.DoesNotExist:
+                    return JsonResponse({'status': 'error', 'message': 'Facility not found'}, status=404)
             
-        # ใช้ข้อมูล JSON ในการสร้างหรืออัปเดตฟอร์ม
-        form = CalendarForm(data, instance=schedule)  # ถ้ามี instance จะเป็นการอัปเดต
-        
-        if form.is_valid():
-            schedule = form.save(commit=False)
-            
-            if location:  # ตรวจสอบว่ามี location หรือไม่
-                schedule.facility = location
+            if activity_id:
+                try:
+                    activity = Event.objects.get(pk=activity_id)
+                except Event.DoesNotExist:
+                    return JsonResponse({'status': 'error', 'message': 'Event not found'}, status=404)
 
-            if activity:  # ตรวจสอบว่ามี activity หรือไม่
-                schedule.event = activity
-
-            schedule.student = student 
-            
-            schedule.save()  # บันทึกกิจกรรมลงในฐานข้อมูล
-
-            # แสดงข้อความตามการทำงาน create หรือ update
-
-            return JsonResponse({
-                'status': 'success',
-                'event_id': schedule.id,
-                'message': 'Event updated successfully!' # ส่งข้อความกลับไป
-            })
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Invalid form data',
-                'errors': form.errors
-            }, status=400)
+            form = CalendarForm(data, instance=schedule)
+            if form.is_valid():
+                schedule = form.save(commit=False)
+                if location:
+                    schedule.facility = location
+                if activity:
+                    schedule.event = activity
+                schedule.save()
+                
+                return JsonResponse({
+                    'status': 'success',
+                    'event_id': schedule.id,
+                    'message': 'Event updated successfully!'
+                })
+            else:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Invalid form data',
+                    'errors': form.errors
+                }, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON data'}, status=400)
 
             
             
