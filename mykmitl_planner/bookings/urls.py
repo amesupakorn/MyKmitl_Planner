@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("event-list/", views.EventListPage.as_view(), name="event-list"),
@@ -20,4 +22,8 @@ urlpatterns = [
     path('book-staff/', views.StaffBookPage.as_view(), name='book-staff'),
 
     path('facilities/', views.FacilitiesPage.as_view(), name='facilities'),
+
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

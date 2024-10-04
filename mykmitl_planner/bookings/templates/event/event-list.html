@@ -18,7 +18,12 @@
       <!-- Card looop -->
       {% for e in event %}
       <div class="bg-white rounded-lg overflow-hidden shadow-lg flex flex-col justify-between">
-        <img src="{% static 'images/register.webp' %}" alt="Image 1" class="w-[400px] h-[300px] object-cover">
+        {% if e.event_image %}
+          <img src='{{ e.event_image.url }}' alt="{{ event.name }}" class="w-[400px] h-[300px] object-cover">
+        {% else %}
+          <img src="{% static 'images/register.webp' %}" alt="{{ event.name }}"class="w-[400px] h-[300px] object-cover">
+
+        {% endif %}
         <div class="p-6 flex flex-col flex-grow">
           <h3 class="text-xl font-semibold">{{ e.name }}</h3>
 

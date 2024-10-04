@@ -55,7 +55,7 @@ class CreateEventPage(View):
         })
     
     def post(self, request):
-        form = CreateEventForm(request.POST)
+        form = CreateEventForm(request.POST, request.FILES)
         try:
             with transaction.atomic(): 
 
