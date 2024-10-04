@@ -25,3 +25,23 @@ class CreateEventForm(forms.ModelForm):
             'end_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
 
+
+class FacilityForm(forms.ModelForm):
+
+    class Meta:
+        FACILITY_CHOICES = [
+            ('opening', 'opening'),
+            ('closing', 'closing')
+        ]
+
+        model = Facility
+        fields = ['name', 'location', 'description', 'opening', 'closing', 'location', 'status', 'capacity', 'booking_status']
+        widgets = {
+            'opening': forms.TimeInput(attrs={'type': 'time'}),
+            'closing': forms.TimeInput(attrs={'type': 'time'}),
+            'status': forms.Select(choices=FACILITY_CHOICES, attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={
+                'class': 'w-full p-2 border border-gray-300 rounded-lg',
+                'rows': 2,
+            }),
+        }

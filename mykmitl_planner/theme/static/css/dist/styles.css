@@ -1232,6 +1232,18 @@ select {
   width: 12rem;
 }
 
+.w-\[200px\] {
+  width: 200px;
+}
+
+.w-\[\E45\E16 0px\] {
+  width: ๅถ0px;
+}
+
+.w-\[150px\] {
+  width: 150px;
+}
+
 .min-w-full {
   min-width: 100%;
 }
@@ -1605,6 +1617,11 @@ select {
   background-color: rgb(75 85 99 / var(--tw-bg-opacity));
 }
 
+.bg-yellow-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 249 195 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
@@ -1958,6 +1975,11 @@ select {
 .text-neutral-900 {
   --tw-text-opacity: 1;
   color: rgb(23 23 23 / var(--tw-text-opacity));
+}
+
+.text-yellow-800 {
+  --tw-text-opacity: 1;
+  color: rgb(133 77 14 / var(--tw-text-opacity));
 }
 
 .placeholder-gray-400::-moz-placeholder {

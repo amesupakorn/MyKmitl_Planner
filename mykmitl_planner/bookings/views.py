@@ -14,11 +14,12 @@ from .forms import *
 class EventListPage(View):
 
     def get(self, request):
-        event = Event.objects.all()
+        event = Event.objects.all().order_by('-start_time')
         return render(request, "event/event-list.html",{
             'event' : event
         })
     
+
 class EventDetailPage(View):
     
     def get(self, request, id):
@@ -75,6 +76,7 @@ class CreateEventPage(View):
             messages.error(request, f"An error occurred: {str(e)}")
             return redirect('event-list') 
         
+
 class EditEventPage(View):
     def get(self, request, id):
         event = Event.objects.get(id=id)
@@ -110,13 +112,15 @@ class BookingListPage(View):
             'locations' : facility 
         })
     
+
 class BookFirstPage(View):
     
     def get(self, request, location):
-        facilities = Facility.objects.filter(location=location)
+        facilities = Facility.objects.filter(location=location, status = 'opening').order_by('id')
         return render(request, "booking/book-first.html",{
             'facility' : facilities
         })
+
 
 class BookSecondPage(View):
     
@@ -125,6 +129,7 @@ class BookSecondPage(View):
         return render(request, "booking/book-second.html",{
             'facilities' : facilities
         })
+
 
 class CheckAvailableTimes(View):
 
@@ -147,6 +152,7 @@ class CheckAvailableTimes(View):
         
         return JsonResponse([], safe=False)
     
+
 class BookThirdPage(View):
     
     def post(self, request, id):
@@ -181,6 +187,7 @@ class BookThirdPage(View):
         messages.error(request, "Please fill out all required fields.")
         return redirect('book-second', id=id)
 
+
 class BookConfirm(View):
     def post(self, request, id):
         try:
@@ -210,6 +217,7 @@ class BookConfirm(View):
             messages.error(request, f"An error occurred: {str(e)}")
             return redirect('book-third', id=id)    
 
+
 class UpcomingBookPage(View):
     
     def get(self, request):
@@ -238,6 +246,7 @@ class UpcomingBookPage(View):
             messages.error(request, f"An error occurred: {str(e)}")
             return redirect('upcoming')
 
+
 class PastBookPage(View):
     
     def get(self, request):
@@ -247,6 +256,7 @@ class PastBookPage(View):
             'booking' : booking
         })
     
+
 class BookDetailPage(View):
     
     def get(self, request, id):
@@ -255,6 +265,7 @@ class BookDetailPage(View):
             'booking' : booking
         })
     
+
 class StaffBookPage(View):
     
     def get(self, request):
@@ -262,11 +273,101 @@ class StaffBookPage(View):
         return render(request, "booking/staff/book-staff.html",{
             'booking' : booking
         })
-    
+
+
 # Facility
 class FacilitiesPage(View):
     
     def get(self, request):
+        facility = Facility.objects.all().order_by('id')
+        form = FacilityForm()
         return render(request, "facilities/facilities.html",{
-
+            'facilities' : facility,
+            'form': form
         })
+    
+    def post(self, request):
+        form = FacilityForm(request.POST)
+
+        if form.is_valid():
+            try:
+                with transaction.atomic():
+                    form.save() 
+                messages.success(request, "Event created successfully")
+                return redirect('facilities')
+            
+            except Exception as e:
+                print(f"Error saving facility: {e}")
+        
+        facility = Facility.objects.all()
+        return render(request, "facilities/facilities.html", {
+            'facilities': facility,
+            'form': form,
+        })
+    
+    def delete(self, request):
+        try:
+            body = json.loads(request.body)
+            facility_id = body.get('facility_id')
+            Facilities = Facility.objects.get(id=facility_id)
+
+            with transaction.atomic(): 
+                Facilities.delete()
+                messages.success(request, "Delete facility successfully")
+                return JsonResponse({'message': 'Delete facility successfully.'}, status=200)
+  
+        except Exception as e:
+            # จัดการข้อผิดพลาดทั่วไป
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect('facilities')  
+        
+
+class EditFacilities(View):
+
+    def get(self, request, id):
+        print('ddf')
+        facility = Facility.objects.get(id=id)
+        
+        data = {
+            'name': facility.name,
+            'location': facility.location,
+            'description': facility.description,
+            'opening': facility.opening.strftime('%H:%M'),
+            'closing': facility.closing.strftime('%H:%M'),
+            'status': facility.status,
+            'booking_status': facility.booking_status,
+            'capacity': facility.capacity,
+        }
+        
+        return JsonResponse(data)
+
+    def post(self, request, id):
+        facility = Facility.objects.get(id=id)
+        form = FacilityForm(request.POST, instance=facility)
+        if form.is_valid():
+            form.save()
+            return redirect('facilities')
+        
+        return render(request, 'facilities/facilities.html', {
+            'facility': facility,
+            'form': form
+        })
+    
+class ViewFacilities(View):
+
+    def get(self, request, id):
+        print('ddf')
+        facility = Facility.objects.get(id=id)
+        
+        data = {
+            'name': facility.name,
+            'location': facility.location,
+            'description': facility.description,
+            'opening': facility.opening.strftime('%H:%M'),
+            'closing': facility.closing.strftime('%H:%M'),
+            'status': facility.status,
+            'booking_status': facility.booking_status,
+            'capacity': facility.capacity,
+        }
+        
+        return JsonResponse(data)

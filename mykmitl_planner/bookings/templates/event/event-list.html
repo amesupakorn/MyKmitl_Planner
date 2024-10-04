@@ -33,7 +33,7 @@
             </p>
           </div>
 
-          <p class="text-gray-700 text-base mb-4 flex-grow">{{ e.description | truncatewords:2 }}</p>
+          <p class="text-gray-700 text-base mb-4 flex-grow">{{ e.description | truncatewords:1 }}</p>
           <a href="{% url 'event-detail' e.id %}" class="text-orange-500 font-bold hover:underline mt-auto">Learn More →</a>
         </div>
       </div>

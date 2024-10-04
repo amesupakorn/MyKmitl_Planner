@@ -1,5 +1,6 @@
 {% extends "facilities/layoutFaci.html" %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block title %}Facilities Management{% endblock %}
 
@@ -7,7 +8,7 @@
     <div class="container mx-auto max-w-7xl p-6 overflow-y-auto">
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">
-            <h1 class="text-3xl font-bold">Facilities Management (Sport Center)</h1>
+            <h1 class="text-3xl font-bold">Facilities Management</h1>
             <button id="addFacilityBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                 <i class="fas fa-plus mr-2"></i> Add New Facility
             </button>
@@ -28,90 +29,96 @@
                 </thead>
                 <tbody id="facilityTable" class="bg-white divide-y divide-gray-200">
                     <!-- Facility Row 1 -->
+                    {% for facility in facilities %}
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">Badminton Court</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Sport Center</td>
-                        <td class="px-6 py-4 whitespace-nowrap">08:00 AM</td>
-                        <td class="px-6 py-4 whitespace-nowrap">10:00 PM</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ facility.name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ facility.location }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ facility.opening|time:"H:i A" }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ facility.closing|time:"H:i A" }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                Upcoming
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {% if facility.status == 'opening' %}
+                                    bg-green-100 text-green-800
+                                {% elif facility.status == 'closing' %}
+                                    bg-red-100 text-red-800
+                                {% endif %}
+                            ">
+                                {{ facility.status|capfirst }}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <button class="edit-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700">Edit</button>
-                            <button class="delete-btn text-white bg-red-500 px-2 py-2 rounded hover:bg-red-700">Delete</button>
+                            <button id="editFacilityBtn" type='button' class="edit-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700" data-id="{{ facility.id }}">
+                                Edit
+                            </button>
+                            <button onclick="deleteFacility({{ facility.id }})" class="delete-btn text-white bg-red-500 px-2 py-2 rounded hover:bg-red-700">
+                                Delete
+                            </button>
+                            <button id="viewFacilityBtn" class="view-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700" data-id="{{ facility.id }}">
+                                View
+                            </button>
+                            {% csrf_token %}
                         </td>
                     </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center">No facilities available.</td>
+                    </tr>
+                    {% endfor %}
 
-                    <!-- Facility Row 2 -->
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">Basketball Court</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Sport Center</td>
-                        <td class="px-6 py-4 whitespace-nowrap">08:00 AM</td>
-                        <td class="px-6 py-4 whitespace-nowrap">08:00 PM</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Open
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <button class="edit-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700">Edit</button>
-                            <button class="delete-btn text-white bg-red-500 px-2 py-2 rounded hover:bg-red-700 ">Delete</button>
-                        </td>
-                    </tr>
-
-                    <!-- Facility Row 3 -->
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">Football Field</td>
-                        <td class="px-6 py-4 whitespace-nowrap">Sport Center</td>
-                        <td class="px-6 py-4 whitespace-nowrap">06:00 AM</td>
-                        <td class="px-6 py-4 whitespace-nowrap">09:00 PM</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                Closed
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <button class="edit-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700">Edit</button>
-                            <button class="delete-btn text-white bg-red-500 px-2 py-2 rounded hover:bg-red-700">Delete</button>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Modal for Adding or Editing Facility -->
+    <!-- Add -->
     <div id="facilityModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-            <h2 class="text-2xl font-bold mb-4">Add/Edit Facility</h2>
-            <form id="facilityForm">
+            <h2 class="text-2xl font-bold mb-4">Facility</h2>
+            <form id="facilityForm" method="POST" action="">
+                {% csrf_token %}
+
                 <div class="mb-4">
                     <label for="facilityName" class="block text-gray-700">Facility Name</label>
-                    <input type="text" id="facilityName" class="w-full p-2 border border-gray-300 rounded-lg">
+                    {{ form.name|add_class:"w-full p-2 border border-gray-300 rounded-lg"}}
                 </div>
+
                 <div class="mb-4">
                     <label for="facilityName" class="block text-gray-700">location Name</label>
-                    <input type="text" id="facilityName" class="w-full p-2 border border-gray-300 rounded-lg">
+                    {{ form.location|add_class:"w-full p-2 border border-gray-300 rounded-lg"}}
                 </div>
+
                 <div class="mb-4">
-                    <label for="openTime" class="block text-gray-700">Open Time</label>
-                    <input type="time" id="openTime" class="w-full p-2 border border-gray-300 rounded-lg">
+                    <label for="facilityName" class="block text-gray-700">Description</label>
+                    {{ form.description }}
                 </div>
+
+                <div class="flex space-x-4 mb-4">
+                    <div class="w-1/2">
+                        <label for="openTime" class="block text-gray-700">Open Time</label>
+                        {{ form.opening|add_class:"w-full p-2 border border-gray-300 rounded-lg"}}
+                    </div>
+                    <div class="w-1/2">
+                        <label for="closeTime" class="block text-gray-700">Close Time</label>
+                        {{ form.closing|add_class:"w-full p-2 border border-gray-300 rounded-lg"}}
+                    </div>
+                </div>
+
+                <div class="flex space-x-4 mb-4">
+                    <div class="w-1/2">
+                        <label for="status" class="block text-gray-700">Facility Status</label>
+                        {{ form.status|add_class:"status-dropdown p-2 border border-gray-300 rounded-lg w-full" }}
+                    </div>
+                    <div class="w-1/2">
+                        <label for="bookingStatus" class="block text-gray-700">Booking Status</label>
+                        {{ form.booking_status|add_class:"status-dropdown p-2 border border-gray-300 rounded-lg w-full"}}
+                    </div>
+                </div>
+
                 <div class="mb-4">
-                    <label for="closeTime" class="block text-gray-700">Close Time</label>
-                    <input type="time" id="closeTime" class="w-full p-2 border border-gray-300 rounded-lg">
+                    <label for="facilityName" class="block text-gray-700">Capacity</label>
+                    {{ form.capacity|add_class:"w-full p-2 border border-gray-300 rounded-lg"}}
                 </div>
-                <div>
-                    <label for="openTime" class="block text-gray-700">Status</label>
-                    <select class="status-dropdown p-2 border border-gray-300 rounded-lg">
-                        <option value="">Select Status</option>
-                        <option value="open">Open</option>
-                        <option value="closed">Closed</option>
-                        <option value="maintenance">Under Maintenance</option>
-                    </select>
-                </div>
+
                 <div class="flex justify-end">
                     <button type="button" class="cancel-btn bg-red-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
                     <button type="submit" class="save-btn bg-blue-500 text-white px-4 py-2 rounded">Save</button>
@@ -120,31 +127,124 @@
         </div>
     </div>
 
-    <!-- JavaScript for Modal and Interactivity -->
-    <script>
-        // Handle Add Facility Modal
-        document.getElementById('addFacilityBtn').addEventListener('click', function() {
-            document.getElementById('facilityModal').classList.remove('hidden');
-        });
+    <!-- Edit -->
+    <div id="editfacilityModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h2 class="text-2xl font-bold mb-4">Facility</h2>
+            <form id="editfacilityForm" method="POST">
+                {% csrf_token %}
 
-        // Handle Cancel Button
-        document.querySelector('.cancel-btn').addEventListener('click', function() {
-            document.getElementById('facilityModal').classList.add('hidden');
-        });
+                <div class="mb-4">
+                    <label for="facilityName" class="block text-gray-700">Facility Name</label>
+                    {{ form.name|add_class:"w-full p-2 border border-gray-300 rounded-lg" |attr:"id:facilityName"}}
+                </div>
 
-        // Handle Form Submission
-        document.getElementById('facilityForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            // Logic for adding/updating facility
-            document.getElementById('facilityModal').classList.add('hidden');
-        });
+                <div class="mb-4">
+                    <label for="facilityName" class="block text-gray-700">location Name</label>
+                    {{ form.location|add_class:"w-full p-2 border border-gray-300 rounded-lg" |attr:"id:locationName"}}
+                </div>
 
-        // Handle Edit Button
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                // Logic for editing facility
-                document.getElementById('facilityModal').classList.remove('hidden');
-            });
-        });
-    </script>
+                <div class="mb-4">
+                    <label for="facilityName" class="block text-gray-700">Description</label>
+                    {{ form.description |attr:"id:facilityDescription"}}
+                </div>
+
+                <div class="flex space-x-4 mb-4">
+                    <div class="w-1/2">
+                        <label for="openTime" class="block text-gray-700">Open Time</label>
+                        {{ form.opening|add_class:"w-full p-2 border border-gray-300 rounded-lg" |attr:"id:openTime"}}
+                    </div>
+                    <div class="w-1/2">
+                        <label for="closeTime" class="block text-gray-700">Close Time</label>
+                        {{ form.closing|add_class:"w-full p-2 border border-gray-300 rounded-lg" |attr:"id:closeTime"}}
+                    </div>
+                </div>
+
+                <div class="flex space-x-4 mb-4">
+                    <div class="w-1/2">
+                        <label for="status" class="block text-gray-700">Facility Status</label>
+                        {{ form.status|add_class:"status-dropdown p-2 border border-gray-300 rounded-lg w-full" |attr:"id:status"}}
+                    </div>
+                    <div class="w-1/2">
+                        <label for="bookingStatus" class="block text-gray-700">Booking Status</label>
+                        {{ form.booking_status|add_class:"status-dropdown p-2 border border-gray-300 rounded-lg w-full" |attr:"id:bookingStatus"}}
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="facilityName" class="block text-gray-700">Capacity</label>
+                    {{ form.capacity|add_class:"w-full p-2 border border-gray-300 rounded-lg" |attr:"id:capacity"}}
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="button" class="editcancel-btn bg-red-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+                    <button type="submit" class="save-btn bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View -->
+    <div id="viewfacilityModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h2 class="text-2xl font-bold mb-4">Facility</h2>
+    
+            <div class="mb-4">
+                <label for="facilityName" class="block text-gray-700">Facility Name</label>
+                <p id="facilityNameView"></p>
+            </div>
+    
+            <div class="mb-4">
+                <label for="locationName" class="block text-gray-700">Location Name</label>
+                <p id="locationNameView"></p>
+            </div>
+    
+            <div class="mb-4">
+                <label for="facilityDescription" class="block text-gray-700">Description</label>
+                <p id="facilityDescriptionView"></p>
+            </div>
+    
+            <div class="flex space-x-4 mb-4">
+                <div class="w-1/2">
+                    <label for="openTime" class="block text-gray-700">Open Time</label>
+                    <p id="openTimeView"></p>
+                </div>
+                <div class="w-1/2">
+                    <label for="closeTime" class="block text-gray-700">Close Time</label>
+                    <p id="closeTimeView"></p>
+                </div>
+            </div>
+    
+            <div class="flex space-x-4 mb-4">
+                <div class="w-1/2">
+                    <label for="status" class="block text-gray-700">Facility Status</label>
+                    <p id="statusView"></p>
+                </div>
+                <div class="w-1/2">
+                    <label for="bookingStatus" class="block text-gray-700">Booking Status</label>
+                    <p id="bookingStatusView"></p>
+                </div>
+            </div>
+    
+            <div class="mb-4">
+                <label for="capacity" class="block text-gray-700">Capacity</label>
+                <p id="capacityView"></p>
+            </div>
+    
+            <div class="flex justify-end">
+                <button type="button" class="close-btn bg-red-500 text-white px-4 py-2 rounded mr-2">Close</button>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
+
+{% block script %}
+
+    <script type="text/javascript">
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
+
+    <script src="{% static 'scripts/facility.js' %}"></script>
+
+{%endblock%}
