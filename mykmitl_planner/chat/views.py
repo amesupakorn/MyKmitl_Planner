@@ -90,19 +90,6 @@ class ChatHelpPage(View):
         })      
 
 
-class ChatPage(APIView):
-    def get(self, request):
-        
-         # ตรวจสอบว่าผู้ใช้เป็น student หรือ staff
-        if hasattr(request.user, 'student'):
-            user_role = 'student'
-            
-        return render(request, "chat.html", {
-            'user_role': user_role,
-            'sender' : sender
-        })
-    
-
 class MessageList(APIView):
     def get(self, request, format=None):
         student = Student.objects.get(student_user=request.user)
