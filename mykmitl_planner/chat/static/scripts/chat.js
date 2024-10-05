@@ -2,12 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const sendButton = document.getElementById('send-button');
   const messageInput = document.getElementById('message-input');
   const chatContainer = document.querySelector('.msger-chat');
-  // Function to send message to API
+  let = userRole = '';
 
   const loadMessages = () => {
       const welcomeMessage = {
         student: 0,  // ใช้ 0 เพื่อบ่งบอกว่าเป็นข้อความจากเจ้าหน้าที่
-        content: `สวัสดีครับคุณ ${username}, ขอบคุณที่ส่งข้อความถึงเรา
+        content: `สวัสดีครับ, ขอบคุณที่ส่งข้อความถึงเรา
         หากคุณมีปัญหาหรือข้อสงสัยอะไรโปรดกรอกรายละเอียดไว้ได้เลยครับ 
         เราจะพยายามตอบกลับถึงคุณโดยเร็วที่สุด`,
         timestamp: new Date()  // เวลา ณ ปัจจุบัน
@@ -15,15 +15,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     displayNewMessage(welcomeMessage);  
 
-    fetch('message/', {  
+    fetch('', {  
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
         },
     })
     .then(response => response.json())
-    .then(messages => {
-        messages.forEach(displayNewMessage); 
+    .then(data => {
+        userRole = data.user_role
+        data.messages.forEach(displayNewMessage); 
     })
     .catch((error) => {
         console.error('Error fetching messages:', error);
@@ -37,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
           sender: userRole  
       };
 
-      fetch('message/', {
+      fetch('', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -66,7 +67,9 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="msg-bubble">
               <div class="msg-info">
                   <div class="msg-info-name">${isStudentMessage ? 'You' : 'Staff'}</div>
-                  <div class="msg-info-time">${new Date(message.timestamp).toLocaleTimeString()}</div>
+                  <div class="msg-info-time">
+                      ${new Date(message.timestamp).toLocaleDateString()} ${new Date(message.timestamp).toLocaleTimeString()}
+                  </div>
               </div>
               <div class="msg-text">
                   ${message.content}

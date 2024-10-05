@@ -1,0 +1,49 @@
+{% extends "layoutchat.html" %}
+{% load static %}
+
+{% block title %}Chat{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% csrf_token %}
+    <div class="container p-3 overflow-y-auto">
+        <div class="flex items-center justify-between mb-4">
+            {% if student.first_name %}
+                <h1 class="text-2xl font-bold ml-4">Chat with {{ student }}</h1>
+            {% else %}
+                <h1 class="text-2xl font-bold ml-4">Chat with {{ student.student_user }}</h1>
+
+            {% endif %}
+            <a href="{% url 'chat-list' %}" class="text-orange-500 border border-orange-500 px-4 py-1 rounded hover:bg-orange-500 hover:text-white mr-4">ย้อนกลับ</a>
+        </div>
+
+        <section class="msger bg-white p-6 rounded-lg shadow-lg">
+            <main class="msger-chat">
+        
+            
+            </main>
+            <!-- Input field -->
+            <div class="msger-inputarea rounded-2xl">            
+                <input type="text" id="message-input" class="msger-input rounded-lg" placeholder="Enter your message...">
+                <button type="button" id="send-button" class="msger-send-btn rounded-lg">Send</button>
+            </div>
+            
+
+        </section>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script> 
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
+
+    <script src="{% static 'scripts/chat-student.js' %}"></script>
+    <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
+  
+{% endblock %}
+</body>
+</html>

@@ -15,62 +15,41 @@
         <div class="space-y-4">
             <!-- Chat Item 1 -->
             
-            <a href="{% url 'chat' %}" class="block">
+            {% for m in message_info %}
+            <a href="{% url 'chat-student' m.student_id %}" class="block">
                 <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:bg-orange-200 transition duration-200">
                     <div class="flex items-center space-x-3">
-                        <div class="flex items-center justify-center w-8 h-8 bg-black rounded-full">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div>
-                            <p class="font-bold">Student 1</p>
-                            <p class="text-gray-500 text-sm">แถว มอ มีมอไซค์ให้เช่าไหมค้าบบอก</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end">
-                        <p class="text-sm text-gray-400">17:57</p>
-                        <span class="bg-red-500 text-white text-sm rounded-full px-2 py-1">9</span>
-                    </div>
-                </div>
-            </a>
+                        {% if m.last_message.student.profile_picture %}
+                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ m.last_message.student.profile_picture.url }}" alt="Profile Picture">
+                        {% else %}
+                                <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
+                        {% endif %}
+                            <div>
+                                {% if m.last_message.student.first_name %}
 
-            <!-- Chat Item 2 -->
-            <a href="{% url 'chat' %}" class="block">
-                <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:bg-orange-200 transition duration-200">
-                    <div class="flex items-center space-x-3">
-                        <div class="flex items-center justify-center w-8 h-8 bg-black rounded-full">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div>
-                            <p class="font-bold">Student 2</p>
-                            <p class="text-gray-500 text-sm">event นี้ปิดรึยัง</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end">
-                        <p class="text-sm text-gray-400">17:37</p>
-                        <span class="bg-red-500 text-white text-sm rounded-full px-2 py-1">1</span>
-                    </div>
-                </div>
-            </a>
+                                    <p class="font-bold">{{ m.last_message.student }}</p>
+                                {% else %}
+                                    <p class="font-bold">{{ m.last_message.student.student_user }}</p>
+                                {% endif %}
 
-            <!-- Chat Item 3 -->
-            <a href="{% url 'chat' %}" class="block">
-                <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:bg-orange-200 transition duration-200">
-                    <div class="flex items-center space-x-3">
-                        <div class="flex items-center justify-center w-8 h-8 bg-black rounded-full">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div>
-                            <p class="font-bold">Student 3</p>
-                            <p class="text-gray-500 text-sm">อยากให้ตึกเปิด 24 ชม.</p>
-                        </div>
+                                {% if m.last_message.sender == 'staff' %}
+                                    <p class="text-gray-500 text-sm">You: {{ m.last_message.content }}</p>
+                                {% else %}
+                                    <p class="text-gray-500 text-sm">{{ m.last_message.content }}</p>
+                                {% endif %}
+                            </div>
+                          
                     </div>
                     <div class="flex flex-col items-end">
-                        <p class="text-sm text-gray-400">17:37</p>
-                        <span class="bg-red-500 text-white text-sm rounded-full px-2 py-1">1</span>
+                        <p class="text-sm text-gray-400">{{ m.last_message.timestamp }}</p>
+                        {% if m.message_sent %}
+                            <span class="bg-red-500 text-white text-sm rounded-full px-2 py-1">{{ m.message_sent }}</span>
+                        {% endif %}
                     </div>
                 </div>
             </a>
-            
+            {% endfor %}
+        
         </div>
     </section>
 {% endblock %}

@@ -16,3 +16,10 @@ class Message(models.Model):
     
     def __str__(self):
         return f"Message from {self.student} to {self.staff}"
+    
+    def mark_as_read(self):
+        self.status = 'read'
+        self.save()
+        
+
+     
