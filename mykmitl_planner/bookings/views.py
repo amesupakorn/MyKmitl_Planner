@@ -8,53 +8,119 @@ from django.contrib import messages
 from datetime import datetime, timedelta
 from django.db import transaction
 import json
+from .forms import *
 
 # Event
 class EventListPage(View):
-    
+
     def get(self, request):
+        event = Event.objects.all().order_by('-start_time')
         return render(request, "event/event-list.html",{
-            
+            'event' : event
         })
     
+
 class EventDetailPage(View):
     
-    def get(self, request):
+    def get(self, request, id):
+        event = Event.objects.get(id=id)
         return render(request, "event/event-detail.html",{
-
+            'event' : event
         })
     
+    def delete(self, request, id):
+        try:
+            body = json.loads(request.body)
+            event_id = body.get('event_id')
+            event = Event.objects.get(id=event_id)
+
+            with transaction.atomic(): 
+                event.facility.clear()
+                event.delete()
+                messages.success(request, "Delete event successfully")
+                return JsonResponse({'message': 'Delete event successfully.'}, status=200)
+  
+            
+        except Exception as e:
+            # จัดการข้อผิดพลาดทั่วไป
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect('event-detail')  
+    
+
 class CreateEventPage(View):
     
     def get(self, request):
-        return render(request, "event/staff/create-event.html",{
-
+        form = CreateEventForm()
+        return render(request, "event/staff/create-event.html", {
+            'form': form
         })
+    
+    def post(self, request):
+        form = CreateEventForm(request.POST, request.FILES)
+        try:
+            with transaction.atomic(): 
+
+                if form.is_valid():
+                    event = form.save(commit=False)
+                    staff_member = UniversityStaff.objects.get(staff_user=request.user)
+
+                    event.staff = staff_member
+                    event.save()
+                    form.save_m2m() 
+                    
+                    messages.success(request, "Event created successfully")
+                    return redirect('event-list')
+
+        except Exception as e:
+            # จัดการข้อผิดพลาดทั่วไป
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect('event-list') 
+        
 
 class EditEventPage(View):
-    
-    def get(self, request):
-        return render(request, "event/staff/edit-event.html",{
+    def get(self, request, id):
+        event = Event.objects.get(id=id)
+        form = CreateEventForm(instance=event)
+        return render(request, 'event/staff/edit-event.html', {
+            'event': event,
+            'form' : form
+        })
 
+    def post(self, request, id):
+        event = Event.objects.get(id=id)
+        form = CreateEventForm(request.POST, request.FILES, instance=event)
+        if form.is_valid():
+            form.save()
+            return redirect('event-detail', id=event.id)
+        
+        return render(request, 'event/staff/edit-event.html', {
+            'event': event
         })
     
 
 # Booking
 class BookingListPage(View):
     def get(self, request):
+        bookings = Booking.objects.all()
+        # อัปเดตสถานะการจองทั้งหมด
+        for booking in bookings:
+            booking.update_status()
+
         facility = Facility.objects.filter(booking_status='available').values('location').distinct()
 
         return render(request, "booking/book-list.html",{
             'locations' : facility 
         })
     
+
 class BookFirstPage(View):
     
     def get(self, request, location):
-        facilities = Facility.objects.filter(location=location)
+        facilities = Facility.objects.filter(location=location, status = 'opening').order_by('id')
         return render(request, "booking/book-first.html",{
             'facility' : facilities
         })
+
 
 class BookSecondPage(View):
     
@@ -63,6 +129,7 @@ class BookSecondPage(View):
         return render(request, "booking/book-second.html",{
             'facilities' : facilities
         })
+
 
 class CheckAvailableTimes(View):
 
@@ -84,8 +151,8 @@ class CheckAvailableTimes(View):
             return JsonResponse(times, safe=False)
         
         return JsonResponse([], safe=False)
-
     
+
 class BookThirdPage(View):
     
     def post(self, request, id):
@@ -119,6 +186,7 @@ class BookThirdPage(View):
         # กรณีที่ไม่มีข้อมูล date หรือ time
         messages.error(request, "Please fill out all required fields.")
         return redirect('book-second', id=id)
+
 
 class BookConfirm(View):
     def post(self, request, id):
@@ -164,6 +232,7 @@ class UpcomingBookPage(View):
             body = json.loads(request.body)
             booking_id = body.get('booking_id')
             booking = Booking.objects.get(id=booking_id)
+
             with transaction.atomic(): 
                 if booking.booking_status != 'cancelled':
                     booking.booking_status = 'cancelled'
@@ -171,10 +240,12 @@ class UpcomingBookPage(View):
                     
                     messages.success(request, "Booking cancelled successfully")
                     return JsonResponse({'message': 'Booking cancelled successfully.'}, status=200)
+                
         except Exception as e:
             # จัดการข้อผิดพลาดทั่วไป
             messages.error(request, f"An error occurred: {str(e)}")
             return redirect('upcoming')
+
 
 class PastBookPage(View):
     
@@ -185,6 +256,7 @@ class PastBookPage(View):
             'booking' : booking
         })
     
+
 class BookDetailPage(View):
     
     def get(self, request, id):
@@ -193,6 +265,7 @@ class BookDetailPage(View):
             'booking' : booking
         })
     
+
 class StaffBookPage(View):
     
     def get(self, request):
@@ -200,10 +273,101 @@ class StaffBookPage(View):
         return render(request, "booking/staff/book-staff.html",{
             'booking' : booking
         })
-    
+
+
+# Facility
 class FacilitiesPage(View):
     
     def get(self, request):
+        facility = Facility.objects.all().order_by('id')
+        form = FacilityForm()
         return render(request, "facilities/facilities.html",{
-
+            'facilities' : facility,
+            'form': form
         })
+    
+    def post(self, request):
+        form = FacilityForm(request.POST)
+
+        if form.is_valid():
+            try:
+                with transaction.atomic():
+                    form.save() 
+                messages.success(request, "Event created successfully")
+                return redirect('facilities')
+            
+            except Exception as e:
+                print(f"Error saving facility: {e}")
+        
+        facility = Facility.objects.all()
+        return render(request, "facilities/facilities.html", {
+            'facilities': facility,
+            'form': form,
+        })
+    
+    def delete(self, request):
+        try:
+            body = json.loads(request.body)
+            facility_id = body.get('facility_id')
+            Facilities = Facility.objects.get(id=facility_id)
+
+            with transaction.atomic(): 
+                Facilities.delete()
+                messages.success(request, "Delete facility successfully")
+                return JsonResponse({'message': 'Delete facility successfully.'}, status=200)
+  
+        except Exception as e:
+            # จัดการข้อผิดพลาดทั่วไป
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect('facilities')  
+        
+
+class EditFacilities(View):
+
+    def get(self, request, id):
+        print('ddf')
+        facility = Facility.objects.get(id=id)
+        
+        data = {
+            'name': facility.name,
+            'location': facility.location,
+            'description': facility.description,
+            'opening': facility.opening.strftime('%H:%M'),
+            'closing': facility.closing.strftime('%H:%M'),
+            'status': facility.status,
+            'booking_status': facility.booking_status,
+            'capacity': facility.capacity,
+        }
+        
+        return JsonResponse(data)
+
+    def post(self, request, id):
+        facility = Facility.objects.get(id=id)
+        form = FacilityForm(request.POST, instance=facility)
+        if form.is_valid():
+            form.save()
+            return redirect('facilities')
+        
+        return render(request, 'facilities/facilities.html', {
+            'facility': facility,
+            'form': form
+        })
+    
+class ViewFacilities(View):
+
+    def get(self, request, id):
+        print('ddf')
+        facility = Facility.objects.get(id=id)
+        
+        data = {
+            'name': facility.name,
+            'location': facility.location,
+            'description': facility.description,
+            'opening': facility.opening.strftime('%H:%M'),
+            'closing': facility.closing.strftime('%H:%M'),
+            'status': facility.status,
+            'booking_status': facility.booking_status,
+            'capacity': facility.capacity,
+        }
+        
+        return JsonResponse(data)

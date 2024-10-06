@@ -4,8 +4,6 @@ from planner.models import Schedule
 class CalendarForm(forms.ModelForm):
     
     class Meta:
-        
-        
         model = Schedule
         field = ['facility', 'event', 'title', 'description', 'start_time', 'end_time', 'color']
         exclude = ['student']

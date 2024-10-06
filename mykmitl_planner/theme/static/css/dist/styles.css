@@ -1300,6 +1300,7 @@ select {
   width: 12rem;
 }
 
+<<<<<<< HEAD
 .w-14 {
   width: 3.5rem;
 }
@@ -1310,6 +1311,18 @@ select {
 
 .w-\[600px\] {
   width: 600px;
+=======
+.w-\[200px\] {
+  width: 200px;
+}
+
+.w-\[\E45\E16 0px\] {
+  width: ๅถ0px;
+}
+
+.w-\[150px\] {
+  width: 150px;
+>>>>>>> origin/draft
 }
 
 .min-w-full {
@@ -1677,6 +1690,11 @@ select {
 .bg-yellow-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(234 179 8 / var(--tw-bg-opacity));
+}
+
+.bg-yellow-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 249 195 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-50 {
@@ -2086,6 +2104,11 @@ select {
 
 .underline {
   text-decoration-line: underline;
+}
+
+.text-yellow-800 {
+  --tw-text-opacity: 1;
+  color: rgb(133 77 14 / var(--tw-text-opacity));
 }
 
 .placeholder-gray-400::-moz-placeholder {

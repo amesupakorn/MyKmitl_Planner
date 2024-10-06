@@ -47,6 +47,10 @@
                         <i class="fas fa-comments mr-3"></i>
                         Chat
                     </a>
+                    <a href="{% url 'facilities' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                        <i class="fas fa-map mr-3"></i>
+                        Facilities
+                    </a>
                     <a href="{% url 'event-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-building mr-3"></i>
                         Recommend
@@ -77,8 +81,12 @@
                             <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ user.student.profile_picture.url }}" alt="Profile Picture">
                     {% else %}
                             <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
+<<<<<<< HEAD
                     {% endif %}
                 
+=======
+                    {% endif %} 
+>>>>>>> origin/draft
                     <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
 
                     <div x-show="isOpen" class="account absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-14 mr-8" style="z-index: 9999;">
@@ -112,6 +120,10 @@
                     <a href="{% url 'chat-help' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-comments mr-3"></i>
                         Chat
+                    </a>
+                    <a href="{% url 'facilities' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                        <i class="fas fa-map mr-3"></i>
+                        Facilities
                     </a>
                     <a href="{% url 'event-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-building mr-3"></i>

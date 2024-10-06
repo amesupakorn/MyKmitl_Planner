@@ -50,11 +50,12 @@ class Facility(models.Model):
     status = models.CharField(max_length=20)
     capacity = models.IntegerField()
     booking_status = models.CharField(max_length=20, choices=BOOKING_CHOICES, default='available')
-    
+
     def __str__(self):
         return self.name
     
 class Event(models.Model):
+    
     staff = models.ForeignKey('planner.UniversityStaff', on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=500)

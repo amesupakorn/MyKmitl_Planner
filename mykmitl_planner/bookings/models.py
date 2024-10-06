@@ -1,6 +1,6 @@
+from datetime import datetime
 from django.db import models
 from planner.models import Facility    
-from django.utils import timezone
 
 class Booking(models.Model):
     STATUS_CHOICES = [
@@ -19,25 +19,16 @@ class Booking(models.Model):
         return f"Booking by {self.student} at {self.facility}"
     
     def update_status(self):
-            """
-            อัปเดตสถานะการจองตามเวลาปัจจุบัน
-            """
-            now = timezone.now()
 
-            # รวม checkin_date และ checkin_time เพื่อสร้าง datetime ของการเช็คอิน
-            checkin_datetime = timezone.make_aware(
-                timezone.datetime.combine(self.checkin_date, self.checkin_time)
-            )
-
-            # รวม checkin_date และ checkout_time เพื่อสร้าง datetime ของการเช็คเอาท์
-            checkout_datetime = timezone.make_aware(
-                timezone.datetime.combine(self.checkin_date, self.checkout_time)
-            )
-
+            now = datetime.now()
+            checkin_datetime = datetime.combine(self.checkin_date, self.checkin_time)
+            
+            checkout_datetime = datetime.combine(self.checkin_date, self.checkout_time)
+            
             # ตรวจสอบและอัปเดตสถานะ
             if self.booking_status != 'cancelled':
                 if now >= checkout_datetime:
-                    self.booking_status = 'confirmed'  # การจองนี้เสร็จสิ้นแล้ว
+                    self.booking_status = 'confirmed' 
                 elif now < checkin_datetime:
-                    self.booking_status = 'upcoming'  # การจองที่ยังไม่เกิดขึ้น
+                    self.booking_status = 'upcoming'  
                 self.save()
