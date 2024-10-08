@@ -23,7 +23,7 @@ urlpatterns = [
 
     path('facilities/', views.FacilitiesPage.as_view(), name='facilities'),
     path('facilities/edit/<int:id>/', views.EditFacilities.as_view(), name='edit-facility'),
-    path('facilities/view/<int:id>/', views.EditFacilities.as_view(), name='view-facility'),
+    path('facilities/view/<int:id>/', views.ViewFacilities.as_view(), name='view-facility'),
 
 ]
 

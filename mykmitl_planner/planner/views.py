@@ -6,9 +6,12 @@ from django.contrib import messages
 from django.http import JsonResponse
 import json
 from django.contrib.messages import get_messages
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
-class CalendarPage(View):
+class CalendarPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["planner.view_schedule", "planner.add_schedule", "planner.change_schedule", "planner.delete_schedule"]
     
     def get(self, request):
         student = Student.objects.get(student_user=request.user)  # ดึงข้อมูลนักเรียนที่ล็อกอินอยู่

@@ -35,22 +35,47 @@
                     <a href="{% url 'planner_dashboard' %}" class="text-white text-1xl px-3 font-semibold uppercase hover:text-gray-300">Mykmitl Planner</a>
                 </div>
                 <nav class="text-white text-base font-semibold pt-3">
+                    {% if user.is_staff %}
                     <a href="#" class="flex items-center opacity-75 hover:opacity-100 text-white py-4 pl-6 nav-item">
                         <i class="fas fa-tachometer-alt mr-3"></i>
                         Dashboard
                     </a>
+                    {% else %}
+                    <a href="{% url 'planner_dashboard' %}" class="flex items-center opacity-75 hover:opacity-100 text-white py-4 pl-6 nav-item">
+                        <i class="fas fa-calendar-alt mr-3"></i>
+                        Calendar
+                    </a>
+                    {% endif %}
+
+                    {% if user.is_staff %}
                     <a href="{% url 'book-staff' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-map-marker-alt mr-3"></i>
                         Booking
                     </a>
+                    {% else %}
+                    <a href="{% url 'book-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-itemm">
+                        <i class="fas fa-map-marker-alt mr-3"></i>
+                        Booking
+                    </a>
+                    {% endif %}
+
+                    {% if user.is_staff %}
                     <a href="{% url 'chat-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-comments mr-3"></i>
                         Chat
                     </a>
+                    {% else %}
+                    <a href="{% url 'chat-help' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                        <i class="fas fa-comments mr-3"></i>
+                        Chat
+                    </a>
+                    {% endif %}
+
                     <a href="{% url 'facilities' %}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                         <i class="fas fa-map mr-3"></i>
                         Facilities
                     </a>
+
                     <a href="{% url 'event-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-building mr-3"></i>
                         Activities
@@ -77,6 +102,11 @@
                         </button>
 
                     {% endif %}
+                    {% if user.student.profile_picture %}
+                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ user.student.profile_picture.url }}" alt="Profile Picture">
+                    {% else %}
+                            <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
+                    {% endif %}
                     <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
 
                     <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
@@ -98,22 +128,47 @@
 
                 <!-- Dropdown Nav -->
                 <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
-                    <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    {% if user.is_staff %}
+                    <a href="#" class="flex items-center opacity-75 hover:opacity-100 text-white py-4 pl-6 nav-item">
                         <i class="fas fa-tachometer-alt mr-3"></i>
                         Dashboard
                     </a>
+                    {% else %}
+                    <a href="{% url 'planner_dashboard' %}" class="flex items-center opacity-75 hover:opacity-100 text-white py-4 pl-6 nav-item">
+                        <i class="fas fa-calendar-alt mr-3"></i>
+                        Calendar
+                    </a>
+                    {% endif %}
+
+                    {% if user.is_staff %}
                     <a href="{% url 'book-staff' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-map-marker-alt mr-3"></i>
                         Booking
                     </a>
+                    {% else %}
+                    <a href="{% url 'book-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-itemm">
+                        <i class="fas fa-map-marker-alt mr-3"></i>
+                        Booking
+                    </a>
+                    {% endif %}
+
+                    {% if user.is_staff %}
                     <a href="{% url 'chat-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-comments mr-3"></i>
                         Chat
                     </a>
+                    {% else %}
+                    <a href="{% url 'chat-help' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                        <i class="fas fa-comments mr-3"></i>
+                        Chat
+                    </a>
+                    {% endif %}
+
                     <a href="{% url 'facilities' %}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                         <i class="fas fa-map mr-3"></i>
                         Facilities
                     </a>
+
                     <a href="{% url 'event-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-building mr-3"></i>
                         Activities

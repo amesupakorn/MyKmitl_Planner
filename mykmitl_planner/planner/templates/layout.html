@@ -104,22 +104,47 @@
 
                 <!-- Dropdown Nav -->
                 <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
+                    {% if user.is_staff %}
+                    <a href="#" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        Dashboard
+                    </a>
+                    {% else %}
                     <a href="{% url 'planner_dashboard' %}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Calendar
                     </a>
-                    <a href="{% url 'book-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    {% endif %}
+
+                    {% if user.is_staff %}
+                    <a href="{% url 'book-staff' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-map-marker-alt mr-3"></i>
                         Booking
                     </a>
+                    {% else %}
+                    <a href="{% url 'book-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-itemm">
+                        <i class="fas fa-map-marker-alt mr-3"></i>
+                        Booking
+                    </a>
+                    {% endif %}
+
+                    {% if user.is_staff %}
                     <a href="{% url 'chat-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-comments mr-3"></i>
                         Chat
                     </a>
+                    {% else %}
+                    <a href="{% url 'chat-help' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                        <i class="fas fa-comments mr-3"></i>
+                        Chat
+                    </a>
+                    {% endif %}
+
                     <a href="{% url 'facilities' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-map mr-3"></i>
                         Facilities
                     </a>
+
                     <a href="{% url 'event-list' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-building mr-3"></i>
                         Recommend

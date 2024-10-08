@@ -83,13 +83,17 @@
 
         <!-- Edit Button -->
         <div class="flex justify-end mt-6 space-x-2">
+            {% if perms.planner.delete_event %}
             <button onclick="deleteEvent({{ event.id }})" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200 ease-in-out">
                 Delete
             </button>
+            {% endif %}
             {% csrf_token %}
+            {% if perms.planner.change_event %}
             <a href="{% url 'edit-event' event.id %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200 ease-in-out">
                 Edit Activities
             </a>
+            {% endif %}
         </div>
     </div>
 </div>

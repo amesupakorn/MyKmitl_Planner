@@ -9,9 +9,11 @@
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-3xl font-bold">Facilities Management</h1>
+            {% if perms.planner.add_facility %}
             <button id="addFacilityBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                 <i class="fas fa-plus mr-2"></i> Add New Facility
             </button>
+            {% endif %}
         </div>
 
         <!-- Facilities Table -->
@@ -47,15 +49,21 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
+                            {% if perms.planner.change_facility %}
                             <button id="editFacilityBtn" type='button' class="edit-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700" data-id="{{ facility.id }}">
                                 Edit
                             </button>
+                            {% endif %}
+                            {% if perms.planner.delete_facility %}
                             <button onclick="deleteFacility({{ facility.id }})" class="delete-btn text-white bg-red-500 px-2 py-2 rounded hover:bg-red-700">
                                 Delete
                             </button>
+                            {% endif %}
+                            {% if perms.planner.view_facility %}
                             <button id="viewFacilityBtn" class="view-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700" data-id="{{ facility.id }}">
                                 View
                             </button>
+                            {% endif %}
                             {% csrf_token %}
                         </td>
                     </tr>

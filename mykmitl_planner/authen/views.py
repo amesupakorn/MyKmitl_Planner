@@ -5,7 +5,6 @@ from allauth.account.forms import SignupForm, LoginForm
 from allauth.account.forms import ResetPasswordForm, SetPasswordForm
 from django.contrib.auth import login, logout  # Import Django's login function
 from planner.models import Student
-from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 from .forms import ProfileForm
 from django.contrib.auth.forms import PasswordChangeForm
@@ -13,9 +12,11 @@ from django.contrib.auth import update_session_auth_hash
 from django.db import transaction
 from django.db import transaction
 
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+
 
 class SignInPage(View):
-    
+
     def get(self, request):
         form = LoginForm()  # ใช้ฟอร์มล็อกอินจาก allauth
         return render(request, "account/signin.html", {
@@ -92,13 +93,15 @@ class EmailConfirmationSentView(View):
         return render(request, "account/email_confirmemail.html", {})    
 
 class LogOutPage(View):
-    
+ 
     def get(self, request):
         logout(request)
         messages.success(request, "You have been logged out successfully.")
         return redirect('account_login')
     
-class EditProfile(View):
+class EditProfile(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["planner.change_student", "planner.view_student"]
     
     def get(self, request):
         # ดึงข้อมูลโปรไฟล์ของผู้ใช้ปัจจุบัน
@@ -127,8 +130,9 @@ class EditProfile(View):
             'student': student,
         })
 
-class PasswordChangeView(View):
-
+class PasswordChangeView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["planner.change_student"]
     def post(self, request):
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():

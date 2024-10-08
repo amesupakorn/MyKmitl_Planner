@@ -71,8 +71,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Authentication middleware
     'allauth.account.middleware.AccountMiddleware',  # Add this line
     'django.contrib.messages.middleware.MessageMiddleware',
-    
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'chat.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'mykmitl_planner.urls'
@@ -186,8 +186,14 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',  # สำหรับ allauth
 )
 
-# ให้ผู้ใช้ต้องยืนยันอีเมลหลังจากสมัครสมาชิก
-
+REST_FRAMEWORK = {
+     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',  # ใช้ session-based authentication
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',  # ตรวจสอบว่าผู้ใช้ต้องล็อกอิน
+    ),
+}
 
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # บังคับให้ต้องยืนยันอีเมลก่อนล็อกอินได้
 ACCOUNT_EMAIL_REQUIRED = True  # บังคับให้ผู้ใช้กรอกอีเมล
@@ -210,3 +216,5 @@ EMAIL_HOST_PASSWORD = 'ansd zsvg xwah sngj'
 
 MEDIA_URL = '/media/'  # URL สำหรับการเข้าถึงไฟล์ที่อัปโหลด
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # ที่เก็บไฟล์ที่อัปโหลดจริง
+
+LOGIN_URL = '/auth'

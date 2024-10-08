@@ -1,7 +1,3 @@
-document.getElementById('addFacilityBtn').addEventListener('click', function() {
-    document.getElementById('facilityModal').classList.remove('hidden');
-});
-
 function deleteFacility(facilityId) {
     fetch('', {
         method: 'DELETE',
@@ -98,3 +94,9 @@ document.querySelectorAll('.cancel-btn, .editcancel-btn, .close-btn').forEach(bu
         document.getElementById('viewfacilityModal').classList.add('hidden');
     });
 });
+
+const addFacilityBtn = document.getElementById('addFacilityBtn');
+if (addFacilityBtn) {
+    addFacilityBtn.addEventListener('click', function() {
+    });
+}

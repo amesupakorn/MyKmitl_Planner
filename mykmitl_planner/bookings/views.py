@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import *
@@ -10,9 +10,14 @@ from django.db import transaction
 import json
 from .forms import *
 
-# Event
-class EventListPage(View):
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
+
+# Event
+class EventListPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["planner.view_event"]
+    
     def get(self, request):
         event = Event.objects.all().order_by('-start_time')
         return render(request, "event/event-list.html",{
@@ -20,7 +25,9 @@ class EventListPage(View):
         })
     
 
-class EventDetailPage(View):
+class EventDetailPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["planner.view_event"]
     
     def get(self, request, id):
         event = Event.objects.get(id=id)
@@ -29,6 +36,8 @@ class EventDetailPage(View):
         })
     
     def delete(self, request, id):
+        if not request.user.has_perm('planner.delete_event'):
+            return HttpResponseForbidden("You do not have permission to delete this event.")
         try:
             body = json.loads(request.body)
             event_id = body.get('event_id')
@@ -47,7 +56,9 @@ class EventDetailPage(View):
             return redirect('event-detail')  
     
 
-class CreateEventPage(View):
+class CreateEventPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["planner.add_event"]
     
     def get(self, request):
         form = CreateEventForm()
@@ -77,7 +88,10 @@ class CreateEventPage(View):
             return redirect('event-list') 
         
 
-class EditEventPage(View):
+class EditEventPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["planner.change_event"]
+    
     def get(self, request, id):
         event = Event.objects.get(id=id)
         form = CreateEventForm(instance=event)
@@ -99,7 +113,10 @@ class EditEventPage(View):
     
 
 # Booking
-class BookingListPage(View):
+class BookingListPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["bookings.view_booking"]
+    
     def get(self, request):
         bookings = Booking.objects.all()
         # อัปเดตสถานะการจองทั้งหมด
@@ -113,8 +130,9 @@ class BookingListPage(View):
         })
     
 
-class BookFirstPage(View):
-    
+class BookFirstPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["bookings.view_booking"]
     def get(self, request, location):
         facilities = Facility.objects.filter(location=location, status = 'opening').order_by('id')
         return render(request, "booking/book-first.html",{
@@ -122,8 +140,9 @@ class BookFirstPage(View):
         })
 
 
-class BookSecondPage(View):
-    
+class BookSecondPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["bookings.view_booking"]
     def get(self, request, id):
         facilities = Facility.objects.get(id=id)
         return render(request, "booking/book-second.html",{
@@ -131,8 +150,9 @@ class BookSecondPage(View):
         })
 
 
-class CheckAvailableTimes(View):
-
+class CheckAvailableTimes(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["bookings.add_booking"]
     def post(self, request):
         # โหลดข้อมูลจาก body ของ request ในรูปแบบ JSON
         body = json.loads(request.body)
@@ -153,7 +173,9 @@ class CheckAvailableTimes(View):
         return JsonResponse([], safe=False)
     
 
-class BookThirdPage(View):
+class BookThirdPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["bookings.add_booking"]
     
     def post(self, request, id):
         facilities = Facility.objects.get(id=id)
@@ -188,7 +210,9 @@ class BookThirdPage(View):
         return redirect('book-second', id=id)
 
 
-class BookConfirm(View):
+class BookConfirm(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["bookings.add_booking"]
     def post(self, request, id):
         try:
 
@@ -217,8 +241,9 @@ class BookConfirm(View):
             messages.error(request, f"An error occurred: {str(e)}")
             return redirect('book-third', id=id)    
 
-
-class UpcomingBookPage(View):
+class UpcomingBookPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["bookings.view_booking", "bookings.change_booking"]
     
     def get(self, request):
         student = Student.objects.get(student_user=request.user)
@@ -247,7 +272,9 @@ class UpcomingBookPage(View):
             return redirect('upcoming')
 
 
-class PastBookPage(View):
+class PastBookPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["bookings.view_booking"]
     
     def get(self, request):
         student = Student.objects.get(student_user=request.user)
@@ -257,7 +284,9 @@ class PastBookPage(View):
         })
     
 
-class BookDetailPage(View):
+class BookDetailPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["bookings.view_booking"]
     
     def get(self, request, id):
         booking = Booking.objects.get(id=id)
@@ -266,7 +295,9 @@ class BookDetailPage(View):
         })
     
 
-class StaffBookPage(View):
+class StaffBookPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["bookings.view_booking"]
     
     def get(self, request):
         booking = Booking.objects.all().order_by('-checkin_date')
@@ -276,7 +307,9 @@ class StaffBookPage(View):
 
 
 # Facility
-class FacilitiesPage(View):
+class FacilitiesPage(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["planner.view_facility"]
     
     def get(self, request):
         facility = Facility.objects.all().order_by('id')
@@ -322,10 +355,11 @@ class FacilitiesPage(View):
             return redirect('facilities')  
         
 
-class EditFacilities(View):
-
+class EditFacilities(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["planner.view_facility", "planner.change_facility"]
+    
     def get(self, request, id):
-        print('ddf')
         facility = Facility.objects.get(id=id)
         
         data = {
@@ -353,10 +387,11 @@ class EditFacilities(View):
             'form': form
         })
     
-class ViewFacilities(View):
+class ViewFacilities(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["planner.view_facility"]
 
     def get(self, request, id):
-        print('ddf')
         facility = Facility.objects.get(id=id)
         
         data = {
