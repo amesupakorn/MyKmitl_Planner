@@ -1,0 +1,183 @@
+{% extends "layout.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+    {% block content %}
+    <div class="container mx-auto max-w-7xl p-6 overflow-y-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="flex items-center">
+                    <div class="bg-blue-100 p-2 rounded-full">
+                        <!-- Icon -->
+                        <svg class="h-8 w-8 text-blue-400"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                          </svg>
+                          
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="text-gray-500">Student User </h4>
+                        <h3 class="text-2xl font-semibold">{{ student }}</h3>
+                        <p class="text-sm text-gray-500">Verified user email</p> 
+
+                    </div>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="flex items-center">
+                    <div class="bg-green-100 p-2 rounded-full">
+                        <!-- Icon -->
+                        <svg class="h-8 w-8 text-green-400"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />  <circle cx="12" cy="10" r="3" /></svg>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="text-gray-500">Current Booking</h4>
+                        <h3 class="text-2xl font-semibold">{{ booking }}</h3>
+                        <p class="text-sm text-gray-500">Booking status upcoming</p> 
+                    </div>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="flex items-center">
+                    <div class="bg-yellow-100 p-2 rounded-full">
+                        <!-- Icon -->
+                        <svg class="h-8 w-8 text-yellow-400"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <polyline points="21 12 17 12 14 20 10 4 7 12 3 12" /></svg>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="text-gray-500">Current Event</h4>
+                        <h3 class="text-2xl font-semibold">{{ event }}</h3>
+                        <p class="text-sm text-gray-500">Activity status upcoming</p> 
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-6 gap-6 mb-6">
+            <div class="bg-white p-6  rounded-lg shadow col-span-4">
+                <div class="flex justify-between items-center mb-4 ">
+                    <div class="flex ">
+                        <svg class="h-7 w-7 text-stone-700"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="4" y1="19" x2="20" y2="19" />  <polyline points="4 15 8 9 12 11 16 6 20 10" /></svg>
+                        <h3 class="text-xl font-semibold">&nbsp; Student Booking</h3>
+                    </div>
+                    <span class="text-xl font-semibold">Totals {{ booking_confirm }}</span>
+                </div>
+                <canvas id="confirmedBookingsChart"></canvas>
+
+            </div>
+
+            <div class="bg-white p-6 overflow-y-auto rounded-lg shadow col-span-2">
+                <div class="flex">
+                    <svg class="h-7 w-7 text-stone-700"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                      </svg>
+                      
+                    <h3 class="text-xl font-semibold mb-4">&nbsp; Inbox</h3>
+                </div>
+                <div class="space-y-4">            
+                    {% for m in message_info %}
+                    <a href="{% url 'chat-student' m.student_id %}" class="block">
+                        <div class="flex items-center justify-between p-2 bg-white rounded-lg shadow-md hover:bg-orange-200 transition duration-200">
+                            <div class="flex items-center space-x-3">
+                                {% if m.last_message.student.profile_picture %}
+                                    <img class="h-10 w-10 rounded-full object-cover mr-4" src="{{ m.last_message.student.profile_picture.url }}" alt="Profile Picture">
+                                {% else %}
+                                        <img class="h-10 w-10 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
+                                {% endif %}
+                                    <div>
+                                        {% if m.last_message.student.first_name %}
+        
+                                            <p class="font-bold">{{ m.last_message.student.first_name }}</p>
+                                        {% else %}
+                                            <p class="font-bold">{{ m.last_message.student.student_user }}</p>
+                                        {% endif %}
+
+                                    </div>
+                                  
+                            </div>
+                            <div class="flex flex-col items-end">
+                                <p class="text-sm text-gray-400">{{ m.last_message.timestamp }}</p>
+                                {% if m.message_sent %}
+                                    <span class="bg-red-500 text-white text-sm rounded-full px-2 py-1">{{ m.message_sent }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+                <div class="bg-white p-6 overflow-x-auto rounded-lg shadow">
+                    <div class="flex justify-between items-center mb-4 ">
+                        <div class="flex ">
+                            <svg class="h-7 w-7 text-stone-700"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M10 3.2a9 9 0 1 0 10.8 10.8a1 1 0 0 0 -1 -1h-6.8a2 2 0 0 1 -2 -2v-7a.9 .9 0 0 0 -1 -.8" />  <path d="M15 3.5a9 9 0 0 1 5.5 5.5h-4.5a1 1 0 0 1 -1 -1v-4.5" /></svg>
+                            <h3 class="text-xl font-semibold">&nbsp;Booking Status</h3>
+                        </div>
+                        <span class="text-xl font-semibold"></span>
+                    </div>
+                    
+                    <div class="bg-white shadow rounded-lg">
+                        <table class="min-w-full table-auto">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Facilities</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Duration</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookingTable" class="bg-white divide-y divide-gray-200">
+            
+                                {% for b in bookings %}
+                                <tr data-status="{{ b.booking_status }}">
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ b.id }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ b.student.student_user.username }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ b.facility.name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ b.facility.location }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ b.checkin_date|date:"d M Y" }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ b.checkin_time | date:"H:i"}} - {{ b.checkout_time | date:"H:i"}}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        {% if b.booking_status == 'upcoming' %}
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                Upcoming
+                                            </span>
+                                        {% elif b.booking_status == 'confirmed' %}
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                Past Booking
+                                            </span>
+                                        {% elif b.booking_status == 'cancelled' %}
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                Cancelled
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+    {% endblock %}
+
+    {% block script %}
+    <script src="{% static 'scripts/dashboard.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    {% endblock %}
+    
+</body>
+</html>

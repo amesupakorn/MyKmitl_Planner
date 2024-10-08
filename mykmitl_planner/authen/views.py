@@ -28,17 +28,24 @@ class SignInPage(View):
         if form.is_valid():
             user = form.user  
             
-            # ตรวจสอบว่าผู้ใช้ยืนยันอีเมลแล้วหรือไม่
-            if not user.emailaddress_set.filter(verified=True).exists():
-                # หากผู้ใช้ยังไม่ได้ยืนยันอีเมล
-                messages.error(request, "Please verify your email before logging in.")
-                return render(request, "account/signin.html", {
-                    'form': form
-                })
+            try:
+                with transaction.atomic():
+                    if not user.emailaddress_set.filter(verified=True).exists():
+                        messages.error(request, "Please verify your email before logging in.")
+                        return render(request, "account/signin.html", {'form': form})
 
-            messages.success(request, "You have signed in successfully.")
-            login(request, user)  # ใช้ฟังก์ชัน login ของ Django เพื่อทำการล็อกอิน
-            return redirect('planner_dashboard')  # Redirect หลังจากล็อกอินสำเร็จ
+                    messages.success(request, "You have signed in successfully.")
+                    login(request, user)
+
+                    if user.is_staff:
+                        return redirect('staff_dashboard')
+
+                    return redirect('planner_dashboard')
+
+            except Exception as e:
+                # ถ้ามีข้อผิดพลาด ให้ rollback transaction
+                messages.error(request, "An error occurred. Please try again.")
+                return render(request, "account/signin.html", {'form': form})
         else:
             # ฟอร์มไม่ถูกต้อง ส่งกลับพร้อมข้อผิดพลาด
             messages.error(request, "Invalid email or password. Please try again.")

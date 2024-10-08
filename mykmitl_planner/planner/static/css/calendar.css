@@ -6,12 +6,12 @@
 }
 
 #calendar-wrapper {
-    width: 100%; /* Calendar takes full width initially */
+    width: 100%; 
     transition: all 0.3s ease;
 }
 
 #calendar-wrapper.reduced {
-    width: 70%; /* Reduce to 75% when form is shown */
+    width: 70%; 
 }
 
 #create-event {
@@ -20,13 +20,9 @@
 }
 
 #create-event.open {
-    width: 30%; /* Show sidebar when open */
+    width: 30%; 
 }
 
-.flex {
-    display: flex;
-    align-items: center;
-}
 
 #close-form-btn {
     background: none;

@@ -134,9 +134,14 @@ $(document).ready(function() {
     });
 });
 
-
-
-
+$(document).ready(function() {
+    // Close form when clicking the close button
+    $('#close-form-btn').on('click', function() {
+        $('#create-event').addClass('hidden');  // Hide the form
+        $('#calendar-wrapper').removeClass('reduced');  // Expand the calendar
+        $('#add-event')[0].reset();  // Reset the form fields
+    });
+});
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -147,13 +152,4 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => { messageBox.style.display = 'none'; }, 1000); // Hide after fade out
         }
     }, 3000); // 5 วินาที
-});
-
-$(document).ready(function() {
-    // Close form when clicking the close button
-    $('#close-form-btn').on('click', function() {
-        $('#create-event').addClass('hidden');  // Hide the form
-        $('#calendar-wrapper').removeClass('reduced');  // Expand the calendar
-        $('#add-event')[0].reset();  // Reset the form fields
-    });
 });

@@ -57,9 +57,13 @@ document.querySelectorAll('.edit-btn').forEach(button => {
 
 
 // View facility
-document.getElementById('viewFacilityBtn').addEventListener('click', function() {
-    document.getElementById('viewfacilityModal').classList.remove('hidden');
-});
+const viewFacility = document.getElementById('viewFacilityBtn')
+if(viewFacility){
+    document.getElementById('viewFacilityBtn').addEventListener('click', function() {
+        document.getElementById('viewfacilityModal').classList.remove('hidden');
+    });
+}
+
 
 document.querySelectorAll('.view-btn').forEach(button => {
     button.addEventListener('click', function () {
@@ -95,8 +99,11 @@ document.querySelectorAll('.cancel-btn, .editcancel-btn, .close-btn').forEach(bu
     });
 });
 
+
 const addFacilityBtn = document.getElementById('addFacilityBtn');
 if (addFacilityBtn) {
     addFacilityBtn.addEventListener('click', function() {
+        document.getElementById('facilityModal').classList.remove('hidden');
     });
 }
+

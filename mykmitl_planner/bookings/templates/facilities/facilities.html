@@ -50,7 +50,7 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {% if perms.planner.change_facility %}
-                            <button id="editFacilityBtn" type='button' class="edit-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700" data-id="{{ facility.id }}">
+                            <button id="editFacilityBtn" type='button' class="edit-btn text-white bg-blue-500 px-4 py-2 rounded hover:bg-blue-700" data-id="{{ facility.id }}">
                                 Edit
                             </button>
                             {% endif %}
@@ -59,7 +59,7 @@
                                 Delete
                             </button>
                             {% endif %}
-                            {% if perms.planner.view_facility %}
+                            {% if perms.planner.view_facility and user.student%}
                             <button id="viewFacilityBtn" class="view-btn text-white bg-blue-500 px-2 py-2 rounded hover:bg-blue-700" data-id="{{ facility.id }}">
                                 View
                             </button>
