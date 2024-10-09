@@ -9,7 +9,7 @@ $(document).ready(function() {
         },
         editable: true,
         eventLimit: 3, 
-        
+        timezone: 'Asia/Bangkok',
         events: eventdjango,
         
         

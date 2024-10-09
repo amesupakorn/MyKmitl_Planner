@@ -1,4 +1,6 @@
 import calendar
+from datetime import timedelta
+from time import localtime
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import *
@@ -22,16 +24,19 @@ class CalendarPage(LoginRequiredMixin, PermissionRequiredMixin, View):
 
         events_list = []
         for event in schedules:
+            start_time = event.start_time + timedelta(hours=7)
+            end_time = event.end_time + timedelta(hours=7)
             events_list.append({
                 'id': event.id,
                 'title': event.title,
-                'start': event.start_time.isoformat(), 
-                'end': event.end_time.isoformat(),
+                'start': start_time.isoformat(), 
+                'end': end_time.isoformat(),
                 'description': event.description,
                 'location': event.facility.id if event.facility else None,  # ใช้ชื่อของ facility แทน
                 'activity': event.event.id if event.event else None, 
                 'color': event.color,
             })
+        print(start_time)
 
         return render(request, "calendar.html", {
             'student': student,
@@ -71,6 +76,7 @@ class CalendarPage(LoginRequiredMixin, PermissionRequiredMixin, View):
                     schedule.facility = location
                 if activity:
                     schedule.event = activity
+                                    
                 schedule.save()
                 
                 return JsonResponse({
