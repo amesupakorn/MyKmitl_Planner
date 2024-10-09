@@ -1,23 +1,37 @@
+
 function deleteFacility(facilityId) {
-    fetch('', {
-        method: 'DELETE',
-        headers: {
-            'X-CSRFToken': csrfToken,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            facility_id: facilityId
-        })
-    })
-    .then(response => {
-        if (response.ok) {
-            window.location.href = '/booking/facilities/';  
-        } else {
-            alert('Failed to delete Facilities.');
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // หากผู้ใช้ยืนยันการลบ, ทำการลบด้วย fetch()
+            fetch('', {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    facility_id: facilityId
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/booking/facilities/';  
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Error!', 'Something went wrong.', 'error');
+            });
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
     });
 }
 

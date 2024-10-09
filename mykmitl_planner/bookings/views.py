@@ -19,10 +19,14 @@ class EventListPage(LoginRequiredMixin, PermissionRequiredMixin, View):
     permission_required = ["planner.view_event"]
     
     def get(self, request):
-        event = Event.objects.all().order_by('-start_time')
+        event = Event.objects.filter(status__in = ['upcoming', 'ongoing']).order_by('-start_time')
+        for e in event:
+            e.check_and_update_status()
+            
         return render(request, "event/event-list.html",{
             'event' : event
         })
+        
     
 
 class EventDetailPage(LoginRequiredMixin, PermissionRequiredMixin, View):

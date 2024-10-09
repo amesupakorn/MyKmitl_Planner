@@ -1,6 +1,9 @@
+import json
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.views import View
+from datetime import timedelta
+from django.utils import timezone
 
 from .permissions import ChatMessagePermission
 from .models import *
@@ -33,11 +36,15 @@ class ChatListPage(LoginRequiredMixin, PermissionRequiredMixin, View):
         message_info = []
         for student_id in student_ids:
             last_message = Message.objects.filter(staff=staff, student_id=student_id).order_by('-timestamp').first()
+            if last_message and last_message.timestamp:
+                timestamp_utc = last_message.timestamp 
+                timestamp_bangkok = timestamp_utc + timedelta(hours=7)
             message_sent = Message.objects.filter(staff=staff, student_id=student_id, status='sent').count()
             message_info.append({
                 'last_message': last_message,
                 'message_sent': message_sent,
-                'student_id' : student_id
+                'student_id' : student_id,
+                'timestamp': timestamp_bangkok
             })
 
         return render(request, "staff/chat-list.html", {
@@ -63,35 +70,41 @@ class ChatDetailStudent(APIView):
             for message in messages:
                 self.check_object_permissions(request, message)
 
-
             serializer = MessageSerializer(messages, many=True)
+            serialized_data = serializer.data
 
+            for message in serialized_data:
+                timestamp = message.get('timestamp')
+                if timestamp:
+
+                    utc_time = timezone.datetime.fromisoformat(timestamp)
+                    updated_time = utc_time + timedelta(hours=7)
+                    message['timestamp'] = updated_time.isoformat()
             data = {
                 "user_role": 'staff',
                 "studentId": student.id,
                 "student_name": student.first_name,
-                "messages": serializer.data
+                "messages": serialized_data
             }
-            return Response(data) 
-
+            return Response(data)
         return render(request, "staff/chat-student.html", {
             'student': student
         })
     
     def post(self, request, id, format=None):
         student = Student.objects.get(student_user_id=id)
-        previous_message = Message.objects.filter(student=student).first()
-        selected_staff = previous_message.staff
-
+        previous_message = Message.objects.filter(student=student, status='sent')
+        staff = UniversityStaff.objects.get(staff_user = request.user)
         try:
             with transaction.atomic():
                 data = request.data.copy()
                 data['student'] = student.id
-                data['staff'] = selected_staff.id
-                
-                # Mark previous message as read
+                data['staff'] = staff.id
+
+
                 if previous_message:
-                    previous_message.mark_as_read()
+                    for p in previous_message:
+                        p.mark_as_read()
 
                 # สร้างและ validate ข้อมูลใหม่
                 serializer = MessageSerializer(data=data)
@@ -127,11 +140,22 @@ class MessageList(APIView):
         if request.headers.get('Accept') == 'application/json':
             messages = Message.objects.filter(student_id=student).order_by('timestamp')
             serializer = MessageSerializer(messages, many=True)
+            serialized_data = serializer.data
+            
+            for message in serialized_data:
+                timestamp = message['timestamp'] 
+                if timestamp:
+                    utc_time = timezone.datetime.fromisoformat(timestamp)
+                    updated_time = utc_time + timedelta(hours=7)
+                    
+                    message['timestamp'] = updated_time.isoformat()
+
+            # เตรียมข้อมูลสำหรับ Response
             data = {
                 "user_role": 'student',
-                "messages": serializer.data
+                "messages": serialized_data
             }
-            return Response(data) 
+            return Response(data)
                 
         return render(request, "chat.html", { })
 
@@ -153,11 +177,12 @@ class MessageList(APIView):
             with transaction.atomic():
                 data = request.data.copy()
                 data['student'] = student.id  
-                data['staff'] = selected_staff.id 
+                data['staff'] = selected_staff.id
                 
                 serializer = MessageSerializer(data=data)
                 if serializer.is_valid():
                     serializer.save()
+                    
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
                 
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

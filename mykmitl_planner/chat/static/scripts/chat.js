@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const messageData = {
           content: content,
           status: "sent",
-          sender: userRole  
+          sender: userRole,
       };
 
       fetch('', {

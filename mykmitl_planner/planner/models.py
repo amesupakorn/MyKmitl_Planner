@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 
 from django.contrib.auth.models import User
@@ -24,6 +25,7 @@ class Student(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+    
 
 class UniversityStaff(models.Model):
     staff_user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -55,19 +57,33 @@ class Facility(models.Model):
         return self.name
     
 class Event(models.Model):
-    
+    EVENT_CHOICES = [
+        ('ongoing', 'ongoing'),
+        ('upcoming', 'upcoming'),
+        ('completed', 'completed')
+    ]
     staff = models.ForeignKey('planner.UniversityStaff', on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=500)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    status = models.CharField(max_length=20)
+    status = models.CharField(choices=EVENT_CHOICES)
     facility = models.ManyToManyField(Facility)
     event_image = models.ImageField(upload_to='event_pics/', null=True, blank=True)
     participants = models.IntegerField()
     
     def __str__(self):
         return self.name
+    
+    
+    def check_and_update_status(self):
+        now = timezone.now()
+        if self.end_time < now and self.status != 'completed':
+            self.status = 'completed'
+            self.save()  
+            return True 
+        return False 
+
     
 class Schedule(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

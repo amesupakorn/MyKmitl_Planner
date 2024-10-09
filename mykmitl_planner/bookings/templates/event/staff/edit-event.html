@@ -63,14 +63,8 @@
             <div class="w-1/2">
                 <label for="status" class="block text-gray-700 font-bold mb-2">สถานะ:</label>
                 {{ form.status|add_class:"w-full p-2 border border-gray-300 rounded-lg" }}
-                <!--<select id="status" name="status" class="w-full p-2 border border-gray-300 rounded-lg" required>
-                    <option value="upcoming" {% if event.status == 'upcoming' %}selected{% endif %}>กำลังจะมาถึง</option>
-                    <option value="ongoing" {% if event.status == 'ongoing' %}selected{% endif %}>กำลังดำเนินการ</option>
-                    <option value="completed" {% if event.status == 'completed' %}selected{% endif %}>เสร็จสิ้นแล้ว</option>
-                </select> -->
             </div>
 
-            <!-- Participant Limit -->
             <div class="w-1/2">
                 <label for="participants" class="block text-gray-700 font-bold mb-2">จำนวนผู้เข้าร่วม (สูงสุด):</label>
                 {{ form.participants|add_class:"w-full p-2 border border-gray-300 rounded-lg" }}
