@@ -10,7 +10,7 @@ from .forms import ProfileForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.db import transaction
-from django.db import transaction
+from django.contrib.auth.models import Group
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -78,6 +78,9 @@ class SignUpPage(View):
                         student_user=userid,
                         email=user.email
                     )
+                    
+                    group, created = Group.objects.get_or_create(name='student')
+                    user.groups.add(group)
                     
                     email_address = user.emailaddress_set.get(email=user.email) 
                     if not email_address.verified:

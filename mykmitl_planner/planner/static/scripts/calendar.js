@@ -124,6 +124,7 @@ $(document).ready(function() {
                 return response.json();
             })
             .then(data => {
+                window.location.reload(); 
 
             })
             .catch(error => {

@@ -19,30 +19,42 @@ class CalendarPage(LoginRequiredMixin, PermissionRequiredMixin, View):
     permission_required = ["planner.view_schedule", "planner.add_schedule", "planner.change_schedule", "planner.delete_schedule"]
     
     def get(self, request):
-        student = Student.objects.get(student_user=request.user)  # ดึงข้อมูลนักเรียนที่ล็อกอินอยู่
-        schedules = Schedule.objects.filter(student=student)  # ดึงข้อมูลตารางกิจกรรมของนักเรียน
+        try:
+            student = Student.objects.get(student_user=request.user)
+            
+            schedules = Schedule.objects.filter(student=student)
+            
+            events_list = []
+            if schedules.exists():  
+                for event in schedules:
+                    start_time = event.start_time + timedelta(hours=7)
+                    end_time = event.end_time + timedelta(hours=7)
+                    events_list.append({
+                        'id': event.id,
+                        'title': event.title,
+                        'start': start_time.isoformat(), 
+                        'end': end_time.isoformat(),
+                        'description': event.description,
+                        'location': event.facility.id if event.facility else None,  
+                        'activity': event.event.id if event.event else None, 
+                        'color': event.color,
+                    })
+            else:
+                pass
 
-        events_list = []
-        for event in schedules:
-            start_time = event.start_time + timedelta(hours=7)
-            end_time = event.end_time + timedelta(hours=7)
-            events_list.append({
-                'id': event.id,
-                'title': event.title,
-                'start': start_time.isoformat(), 
-                'end': end_time.isoformat(),
-                'description': event.description,
-                'location': event.facility.id if event.facility else None,  # ใช้ชื่อของ facility แทน
-                'activity': event.event.id if event.event else None, 
-                'color': event.color,
+            return render(request, "calendar.html", {
+                'student': student,
+                'form': CalendarForm(),
+                'events': json.dumps(events_list) 
             })
-        print(start_time)
-
-        return render(request, "calendar.html", {
-            'student': student,
-            'form': CalendarForm(),
-            'events': json.dumps(events_list)  # แปลง events เป็น JSON string เพื่อใช้ใน JavaScript
-        })
+        
+        except Student.DoesNotExist:
+            # Handle the case where no student record is found for the user
+            return render(request, "calendar.html", {
+                'student': None,  # No student record
+                'form': CalendarForm(),
+                'events': json.dumps([])  # Return empty events list
+            })
         
         
     def post(self, request):
