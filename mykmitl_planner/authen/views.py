@@ -4,9 +4,9 @@ from django.views import View
 from allauth.account.forms import SignupForm, LoginForm
 from allauth.account.forms import ResetPasswordForm, SetPasswordForm
 from django.contrib.auth import login, logout  # Import Django's login function
-from planner.models import Student
+from planner.models import Student, UniversityStaff
 from django.contrib.auth.models import User
-from .forms import ProfileForm
+from .forms import ProfileForm, ProfileStaff
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.db import transaction
@@ -138,6 +138,37 @@ class EditProfile(LoginRequiredMixin, PermissionRequiredMixin, View):
         return render(request, "editaccount.html", {
             'form': form,
             'student': student,
+        })
+
+class EditProfileStaff(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/auth'
+    permission_required = ["planner.change_universitystaff"]
+
+    def get(self, request):
+        # ดึงข้อมูลโปรไฟล์ของผู้ใช้ปัจจุบัน
+        staff = UniversityStaff.objects.get(staff_user=request.user)
+        form = ProfileStaff(instance=staff)
+        formpass = PasswordChangeForm(user=request.user)
+        
+        return render(request, "editStaff.html", {
+            'form': form,
+            'formpass' : formpass,
+            'staff': staff,  
+        })
+
+    def post(self, request):
+
+        staff = UniversityStaff.objects.get(staff_user=request.user)        
+        form = ProfileStaff(request.POST, instance=staff)
+
+        if form.is_valid():
+            form.save() 
+            messages.success(request, "update profile successfully")
+            return redirect('accountstaff')  
+        
+        return render(request, "editStaff.html", {
+            'form': form,
+            'staff': staff,
         })
 
 class PasswordChangeView(LoginRequiredMixin, PermissionRequiredMixin, View):

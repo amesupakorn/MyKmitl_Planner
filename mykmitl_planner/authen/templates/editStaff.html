@@ -1,0 +1,132 @@
+{% extends "layoutprofile.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block title %}Profile{% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="profile container overflow-y-auto mx-auto py-10 px-8">
+        <h1 class="text-3xl font-bold mb-6">MY PROFILE</h1>
+        
+        <!-- Profile Picture Section -->
+        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-300 mb-6"> <!-- เพิ่ม border -->
+            <h2 class="font-bold text-xl mb-4">Profile Picture</h2>
+            <div class="flex items-center">
+                {% if student.profile_picture %}
+                    <img class="h-24 w-24 rounded-full object-cover mr-4" src="{{ student.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="h-24 w-24 rounded-full object-cover mr-4" src="{% static 'image/avatar.png' %}" alt="Default Avatar">
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- Personal Information Section -->
+       
+            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-300 mb-6">
+                <h2 class="font-bold text-xl mb-4">Personal Information</h2>
+                    <form action="{% url 'accountstaff' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="grid grid-cols-2 gap-6">
+                        <!-- First Name -->
+                            <div>
+                                <label class="text-gray-500">First Name</label>
+                                <p class="font-semibold mb-2" id="first-name-text">{{ staff.first_name }}</p>
+                                {{ form.first_name|add_class:"form-input hidden w-full border-gray-300 rounded-md shadow-sm" }}
+                            </div>
+                
+                            <!-- Last Name -->
+                            <div>
+                                <label class="text-gray-500">Last Name</label>
+                                <p class="font-semibold mb-2" id="last-name-text">{{ staff.last_name }}</p>
+                                {{ form.last_name|add_class:"form-input hidden w-full border-gray-300 rounded-md shadow-sm" }}
+                            </div>
+                
+                            <!-- Major -->
+                            <div>
+                                <label class="text-gray-500">Department</label>
+                                <p class="font-semibold mb-2" id="major-text">{{ staff.department }}</p>
+                                {{ form.department|add_class:"form-input hidden w-full border-gray-300 rounded-md shadow-sm" }}
+                            </div>
+                        </div>
+            
+                    <!-- ปุ่ม Edit / Save / Cancel -->
+                    <div class="mt-6">
+                        <button type="button" id="edit-info-btn" class="bg-white px-6 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100">Edit Info</button>
+                        <button type="submit" id="save-info-btn" class="bg-orange-500 text-white px-10 py-1 rounded-full  hidden hover:bg-orange-600">Save</button>
+                        <button type="button" id="cancel-info-btn" class="bg-white text-black px-5 py-1 rounded-full border border-gray-300 hidden hover:bg-gray-100">Cancel</button>
+                    </div>
+                </form>
+        </div>
+
+        
+
+        <!-- Email Section -->
+        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-300 mb-6"> <!-- เพิ่ม border -->
+                <h2 class="font-bold text-xl mb-4">Email address</h2>
+                <p class="text-gray-500">Email</p>
+                <p class="font-semibold">{{ staff.email }}</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-300"> <!-- เพิ่ม border -->
+            <h2 class="font-bold text-xl mb-4">Password</h2>
+            <div class="">
+                <div class="showpass">
+                    <label class="text-gray-500">Current Password</label>
+                    <p class="font-semibold mb-2" id="current-password">**********</p>
+
+                </div>
+            
+            <div class="editpass hidden"> 
+                <div class="space-y-6">
+                    <!-- Current Password -->
+                    <form action="{% url 'account_change_password' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                            <div class="relative">
+                                <label class="text-gray-500">Current Password</label>
+                                {{ formpass.old_password|add_class:"block w-96 pl-10 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm" }}
+
+                            </div>
+                
+                            <!-- New Password -->
+                            <div class="relative">
+                                <label class="text-gray-500">New Password</label>
+                                {{ formpass.new_password1|add_class:"block w-96 pl-10  py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm" }}
+                            </div>
+                
+                            <!-- Confirm New Password -->
+                            <div class="relative">
+                                <label class="text-gray-500">Confirm New Password</label>
+                                {{ formpass.new_password2|add_class:"block w-96 pl-10  py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-m" }}                        
+                            </div>
+                        </div>
+                    </div>
+                        <div class="mt-6">
+                            <button type="button" id="edit-pass-btn" class="bg-white px-6 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100">Change Password</button>
+                            <button type="submit" id="save-pass-btn" class="bg-orange-500 text-white px-10 py-1 rounded-full  hidden hover:bg-orange-600">Save</button>
+                            <button type="button" id="cancel-pass-btn" class="bg-white text-black px-5 py-1 rounded-full border border-gray-300 hidden hover:bg-gray-100">Cancel</button>
+                        </div>
+                    </form>
+               
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block script %}
+  <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
+  <script src="{% static "script/profilestaff.js" %}"></script>
+{% endblock %}
+</body>
+</html>
