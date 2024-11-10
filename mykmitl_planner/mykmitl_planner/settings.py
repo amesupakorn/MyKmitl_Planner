@@ -59,7 +59,21 @@ INSTALLED_APPS = [
     'bookings',
     'chat',
     'authen',
+    'channels',
 ]
+
+ASGI_APPLICATION = "mykmitl_planner.asgi.application" 
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],  # ตั้งค่าให้เชื่อมต่อกับ Redis
+        },
+    },
+}
+
+
 TAILWIND_APP_NAME = 'theme'
 SITE_ID = 1 
 

@@ -69,8 +69,8 @@ pip install fido2
 
 pip install djangorestframework
 
-python3 manage.py tailwind init
+pip install Pillow
 
-python3 -m pip install Pillow
+
 
 ```

@@ -160,34 +160,34 @@ class MessageList(APIView):
         return render(request, "chat.html", { })
 
         
-    def post(self, request, format=None):
-        student = Student.objects.get(student_user=request.user)
+    # def post(self, request, format=None):
+    #     student = Student.objects.get(student_user=request.user)
         
-          # ตรวจสอบว่ามีข้อความที่เกี่ยวข้องกับ student นี้อยู่ในระบบแล้วหรือไม่
-        previous_message = Message.objects.filter(student=student).first()
+    #       # ตรวจสอบว่ามีข้อความที่เกี่ยวข้องกับ student นี้อยู่ในระบบแล้วหรือไม่
+    #     previous_message = Message.objects.filter(student=student).first()
 
-        if previous_message:
-            selected_staff = previous_message.staff
-        else:
-            # ถ้าไม่มีข้อความ ให้สุ่มเลือกเจ้าหน้าที่ใหม่
-            all_staff = UniversityStaff.objects.all()        
-            selected_staff = random.choice(all_staff)
+    #     if previous_message:
+    #         selected_staff = previous_message.staff
+    #     else:
+    #         # ถ้าไม่มีข้อความ ให้สุ่มเลือกเจ้าหน้าที่ใหม่
+    #         all_staff = UniversityStaff.objects.all()        
+    #         selected_staff = random.choice(all_staff)
             
-        try:
-            with transaction.atomic():
-                data = request.data.copy()
-                data['student'] = student.id  
-                data['staff'] = selected_staff.id
+    #     try:
+    #         with transaction.atomic():
+    #             data = request.data.copy()
+    #             data['student'] = student.id  
+    #             data['staff'] = selected_staff.id
                 
-                serializer = MessageSerializer(data=data)
-                if serializer.is_valid():
-                    serializer.save()
+    #             serializer = MessageSerializer(data=data)
+    #             if serializer.is_valid():
+    #                 serializer.save()
                     
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #                 return Response(serializer.data, status=status.HTTP_201_CREATED)
                 
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    #     except Exception as e:
+    #         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 

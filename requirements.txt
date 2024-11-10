@@ -1,0 +1,9 @@
+django-allauth
+django-widget-tweaks
+django-jwt
+PyJWT
+cryptography
+fido2
+djangorestframework
+Pillow
+channels
