@@ -1,9 +1,13 @@
+django
+psycopg2 
+django-tailwind
 django-allauth
 django-widget-tweaks
-django-jwt
+jwt
 PyJWT
 cryptography
 fido2
 djangorestframework
 Pillow
 channels
+requests

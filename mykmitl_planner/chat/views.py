@@ -51,35 +51,42 @@ class ChatListPage(LoginRequiredMixin, PermissionRequiredMixin, View):
             'message_info': message_info,  
         })
 class ChatDetailStudent(APIView):
-    authentication_classes = [SessionAuthentication] 
+    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated, ChatMessagePermission]
 
     def get(self, request, id):
-        
-
+        # ตรวจสอบว่า user เป็น staff ที่ได้รับอนุญาตหรือไม่
         try:
             staff = UniversityStaff.objects.get(staff_user=request.user)
         except UniversityStaff.DoesNotExist:
             return Response({"error": "You are not authorized to view this content."}, status=403)
-        
-        student = Student.objects.get(student_user=id)
-        
 
+        try:
+            student = Student.objects.get(id=id)
+        except Student.DoesNotExist:
+            return Response({"error": "Student does not exist."}, status=404)
+
+        # ตรวจสอบว่า request มาจาก JSON หรือไม่
         if request.headers.get('Accept') == 'application/json':
             messages = Message.objects.filter(student_id=student).order_by('timestamp')
+
+            # ตรวจสอบ permission ของแต่ละ message
             for message in messages:
                 self.check_object_permissions(request, message)
 
+            # Serialize ข้อมูล messages
             serializer = MessageSerializer(messages, many=True)
             serialized_data = serializer.data
 
+            # ปรับ timestamp ให้เป็นเวลาท้องถิ่น (UTC+7)
             for message in serialized_data:
                 timestamp = message.get('timestamp')
                 if timestamp:
-
                     utc_time = timezone.datetime.fromisoformat(timestamp)
                     updated_time = utc_time + timedelta(hours=7)
                     message['timestamp'] = updated_time.isoformat()
+
+            # เตรียมข้อมูล JSON response
             data = {
                 "user_role": 'staff',
                 "studentId": student.id,
@@ -87,8 +94,11 @@ class ChatDetailStudent(APIView):
                 "messages": serialized_data
             }
             return Response(data)
+
+        # ถ้าไม่ใช่ JSON, render หน้า HTML
         return render(request, "staff/chat-student.html", {
-            'student': student
+            'student': student,
+            'staff': staff,
         })
     
     def post(self, request, id, format=None):
@@ -160,34 +170,34 @@ class MessageList(APIView):
         return render(request, "chat.html", { })
 
         
-    # def post(self, request, format=None):
-    #     student = Student.objects.get(student_user=request.user)
+    def post(self, request, format=None):
+        student = Student.objects.get(student_user=request.user)
         
-    #       # ตรวจสอบว่ามีข้อความที่เกี่ยวข้องกับ student นี้อยู่ในระบบแล้วหรือไม่
-    #     previous_message = Message.objects.filter(student=student).first()
+          # ตรวจสอบว่ามีข้อความที่เกี่ยวข้องกับ student นี้อยู่ในระบบแล้วหรือไม่
+        previous_message = Message.objects.filter(student=student).first()
 
-    #     if previous_message:
-    #         selected_staff = previous_message.staff
-    #     else:
-    #         # ถ้าไม่มีข้อความ ให้สุ่มเลือกเจ้าหน้าที่ใหม่
-    #         all_staff = UniversityStaff.objects.all()        
-    #         selected_staff = random.choice(all_staff)
+        if previous_message:
+            selected_staff = previous_message.staff
+        else:
+            # ถ้าไม่มีข้อความ ให้สุ่มเลือกเจ้าหน้าที่ใหม่
+            all_staff = UniversityStaff.objects.all()        
+            selected_staff = random.choice(all_staff)
             
-    #     try:
-    #         with transaction.atomic():
-    #             data = request.data.copy()
-    #             data['student'] = student.id  
-    #             data['staff'] = selected_staff.id
+        try:
+            with transaction.atomic():
+                data = request.data.copy()
+                data['student'] = student.id  
+                data['staff'] = selected_staff.id
                 
-    #             serializer = MessageSerializer(data=data)
-    #             if serializer.is_valid():
-    #                 serializer.save()
+                serializer = MessageSerializer(data=data)
+                if serializer.is_valid():
+                    serializer.save()
                     
-    #                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
                 
-    #             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    #     except Exception as e:
-    #         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
